@@ -9,10 +9,10 @@ import lejos.hardware.port.SensorPort;
 
 
 public class RobComponents {
-    static EV3LargeRegulatedMotor motorL = null;
-    static EV3LargeRegulatedMotor motorR = null;
-    static EV3UltrasonicSensor ussF = null;
-    static EV3UltrasonicSensor ussL = null;
+    static public EV3LargeRegulatedMotor motorL = null;
+    static public EV3LargeRegulatedMotor motorR = null;
+    static public EV3UltrasonicSensor ussF = null;
+    static public EV3UltrasonicSensor ussL = null;
 
     public static void init() {
         motorL = new EV3LargeRegulatedMotor(MotorPort.B);
