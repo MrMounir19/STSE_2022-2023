@@ -8,7 +8,6 @@ import lejos.utility.Delay;
 public class MotorAgent extends Agent{
     @Override
     public void setup() {
-
         restartread();
 
         addBehaviour(new  CyclicBehaviour() {
@@ -50,9 +49,8 @@ public class MotorAgent extends Agent{
     public  void restartread() {
         Delay.msDelay(1500);
         ACLMessage msg1 = new ACLMessage(ACLMessage.INFORM);
-        msg1.addReceiver(new AID("ColorSensorAgent", AID.ISLOCALNAME));
+        msg1.addReceiver(new AID("CommandAgent", AID.ISLOCALNAME));
         msg1.setContent("re-read color");
         send(msg1);
-        System.out.println("eeeeeee");
     }
 }

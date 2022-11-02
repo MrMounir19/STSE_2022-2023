@@ -19,17 +19,13 @@ public class CollisionAvoidanceBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
-        ACLMessage message=this.myAgent.receive();
-        if (message!=null) {  /* Receive Messages */
-            System.out.println("CABehaviour message rec: " + message.getContent());
-            int forward_distance = SensorControl.getFrontSensorDistance();
-            if (forward_distance <= collisionDistance) {
-                System.out.println("Collision detected at range: " + forward_distance);
-                handleCollision(forward_distance);
-            }
+        int forward_distance = SensorControl.getFrontSensorDistance();
+        if (forward_distance <= collisionDistance) {
+            System.out.println("Collision detected at range: " + forward_distance);
+            handleCollision(forward_distance);
         }
 
-        block();
+        block(100);
     }
 
     /**
@@ -38,6 +34,7 @@ public class CollisionAvoidanceBehaviour extends CyclicBehaviour {
     private void handleCollision(int forward_distance) {
         int total_delay = 0;
         while (true) {
+            System.out.println("Initial avoiding collision");
             // We stop the robot.
             MotorControl.stopMotors();
             // We set the robot's speed to 100, which should be fairly slow allowing for a controlled manoeuvre.
@@ -47,6 +44,7 @@ public class CollisionAvoidanceBehaviour extends CyclicBehaviour {
             // While we haven't yet detected an object with the left sensor, we keep turning.
             while (SensorControl.getLeftSensorDistance() > forward_distance) {
                 Delay.msDelay(100);
+                System.out.println("Avoiding collision");
                 total_delay += 100;
                 if (total_delay > 3000) {
                     // If we've been turning for 3 seconds, we assume we've overturned and stop turning.
@@ -74,6 +72,12 @@ public class CollisionAvoidanceBehaviour extends CyclicBehaviour {
             Delay.msDelay(100);
         }
 
+        int extra_delay = 2;
+        while (extra_delay > 0) {
+            extra_delay -= 1;
+            Delay.msDelay(500);
+        }
+
         // We turn it back into the original direction.
         MotorControl.stopMotors();
         MotorControl.setSpeed(MotorControl.slowSpeed);
@@ -85,5 +89,6 @@ public class CollisionAvoidanceBehaviour extends CyclicBehaviour {
 
         // We stop the motor so another behaviour can take over.
         MotorControl.stopMotors();
+        System.out.println("Collision handling finished giving control to other behaviour");
     }
 }

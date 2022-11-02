@@ -1,5 +1,6 @@
 package ExampleAgentsSimple;
 
+import WarehouseRobot.RobComponents;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -15,25 +16,23 @@ public class SimpleContainer {
 
             Runtime runtime = Runtime.instance();
             String target ="192.168.0.174";
-            String source ="192.168.0.180";
-            ProfileImpl p = new ProfileImpl();
+            String source ="192.168.0.165";
+            ProfileImpl p = new ProfileImpl(target,1099,null,false);
 
-            p.setParameter(Profile.MAIN_HOST,target);
             p.setParameter(Profile.LOCAL_HOST,source);
             p.setParameter(Profile.LOCAL_PORT,"1099");
-            p.setParameter(Profile.MAIN_PORT,"1099");
-            p.setParameter(Profile.MAIN, "false");
 
             AgentContainer agentContainer=runtime.createAgentContainer(p);
             ExampleAgentsSimple.SimpleContainer.start();
 
-            Object reference = new Object();
-            Object agent_args[] = new Object[1];
-            agent_args[0] = reference;
-
-            AgentController basicAgent = agentContainer.createNewAgent("BasicAgent",
-                    "ExampleAgentsSimple.BasicAgent", agent_args);
-            basicAgent.start();
+            // Properties properties = new ExtendedProperties();
+            // properties.setProperty(Profile.GUI, "true");
+            //      properties.
+            //Profile profile = new ProfileImpl(properties);
+            RobComponents.init();
+            AgentController motorAgent = agentContainer.createNewAgent("CollisionAvoidanceAgent",
+                    "Agents.CollisionAvoidanceAgent",new Object[]{});
+            motorAgent.start();
 
 
 

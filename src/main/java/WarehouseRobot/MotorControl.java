@@ -3,14 +3,14 @@ package WarehouseRobot;
 import lejos.utility.Delay;
 
 public class MotorControl {
-    static int speed = 600;
-    static final public int slowSpeed = 100;
-    static final public int mediumSpeed = 600;
-    static final public int fastSpeed = 1500;
+    static int speed = 250;
+    static final public int slowSpeed = 50;
+    static final public int mediumSpeed = 250;
+    static final public int fastSpeed = 600;
     static int leftWheelModifier = 1;
     static int rightWheelModifier = 1;
     static int controlDelayMs = 1;
-    static int invertControls = 1; // 1 or -1
+    static int invertControls = -1; // 1 or -1
 
     /**
      * @param speed speed to apply to both motors.
@@ -34,8 +34,8 @@ public class MotorControl {
      */
     public static void turnLeftInPlace() {
         applyToBoth(speed);
-        RobComponents.motorL.backward();
-        RobComponents.motorR.forward();
+        RobComponents.motorL.forward();
+        RobComponents.motorR.backward();
         Delay.msDelay(controlDelayMs);
     }
 
@@ -44,8 +44,8 @@ public class MotorControl {
      */
     public static void turnRightInPlace() {
         applyToBoth(speed);
-        RobComponents.motorL.forward();
-        RobComponents.motorR.backward();
+        RobComponents.motorL.backward();
+        RobComponents.motorR.forward();
         Delay.msDelay(controlDelayMs);
     }
 
