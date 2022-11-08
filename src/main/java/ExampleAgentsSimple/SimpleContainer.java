@@ -15,7 +15,7 @@ public class SimpleContainer {
 
 
             Runtime runtime = Runtime.instance();
-            String target ="192.168.0.174";
+            String target ="192.168.0.181";
             String source ="192.168.0.165";
             ProfileImpl p = new ProfileImpl(target,1099,null,false);
 
@@ -25,13 +25,9 @@ public class SimpleContainer {
             AgentContainer agentContainer=runtime.createAgentContainer(p);
             ExampleAgentsSimple.SimpleContainer.start();
 
-            // Properties properties = new ExtendedProperties();
-            // properties.setProperty(Profile.GUI, "true");
-            //      properties.
-            //Profile profile = new ProfileImpl(properties);
             RobComponents.init();
-            AgentController motorAgent = agentContainer.createNewAgent("CollisionAvoidanceAgent",
-                    "Agents.CollisionAvoidanceAgent",new Object[]{});
+            AgentController motorAgent = agentContainer.createNewAgent("RobotAgent",
+                    "Agents.RobotAgent",new Object[]{});
             motorAgent.start();
 
 
