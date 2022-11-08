@@ -14,13 +14,13 @@ import lejos.utility.Delay;
 
 import static jade.lang.acl.ACLMessage.INFORM;
 
-public class CollisionAvoidanceBehaviour extends CyclicBehaviour {
+public class    CollisionAvoidanceBehaviour extends CyclicBehaviour {
     static private final int collisionDistance = 10;
 
     @Override
     public void action() {
         int forward_distance = SensorControl.getFrontSensorDistance();
-        if (forward_distance <= collisionDistance) {
+        if (0 < forward_distance && forward_distance <= collisionDistance ) {
             System.out.println("Collision detected at range: " + forward_distance);
             handleCollision(forward_distance);
         }
