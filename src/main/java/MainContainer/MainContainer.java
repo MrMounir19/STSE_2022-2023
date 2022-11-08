@@ -21,7 +21,7 @@ public class MainContainer {
             Runtime runtime = Runtime.instance();
             Properties properties = new ExtendedProperties();
             properties.setProperty(Profile.GUI, "true");
-            properties.setProperty(Profile.LOCAL_HOST, "192.168.0.174");
+            properties.setProperty(Profile.LOCAL_HOST, "192.168.0.181");
             properties.setProperty(Profile.LOCAL_PORT, "1099");
 
 
