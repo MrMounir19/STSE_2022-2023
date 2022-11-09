@@ -5,8 +5,8 @@ import lejos.utility.Delay;
 public class MotorControl {
     static int speed = 250;
     static final public int slowSpeed = 50;
-    static final public int mediumSpeed = 250;
-    static final public int fastSpeed = 600;
+    static final public int mediumSpeed = 100;
+    static final public int fastSpeed = 400;
     static int leftWheelModifier = 1;
     static int rightWheelModifier = 1;
     static int controlDelayMs = 1;
@@ -74,5 +74,7 @@ public class MotorControl {
      */
     public static void stopMotors() {
         applyToBoth(0);
+        RobComponents.motorL.forward();
+        RobComponents.motorR.forward();
     }
 }

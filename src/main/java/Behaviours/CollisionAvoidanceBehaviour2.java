@@ -11,9 +11,9 @@ public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
     @Override
     public void action() {
         int forward_distance = SensorControl.getFrontSensorDistance();
-        if (forward_distance > 0 && forward_distance <= collisionDistance) {
+        if (forward_distance > 0 && forward_distance <= collisionDistance - 5) {
             System.out.println("Collision detected at range: " + forward_distance);
-            handleCollision(forward_distance);
+            handleCollision(collisionDistance);
         }
 
         block(100);
@@ -23,7 +23,6 @@ public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
      * @param forward_distance Distance to the object in front of the robot before collision avoidance starts.
      */
     private void handleCollision(int forward_distance) {
-        // TODO: handle if distance == 0.
         System.out.println("Entering collision avoidance.");
         int turn_delay = 0;
         // We stop the robot.
@@ -34,12 +33,18 @@ public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
         MotorControl.turnRightInPlace();
         // While we haven't yet detected an object with the left sensor, we keep turning.
         System.out.println("Initiating turn check.");
-        while (SensorControl.getLeftSensorDistance() >= forward_distance) {
+        int SensorDistanceTolerance = 3;
+        int distance = SensorControl.getLeftSensorDistance();
+        while (distance >= forward_distance) {
             Delay.msDelay(100);
+            distance = SensorControl.getLeftSensorDistance();
+            System.out.println(distance);
+
             turn_delay += 100;
-            if (turn_delay > 3000) {
+            if (turn_delay > 10000) {
                 // If we've been turning for 3 seconds, we assume we've overturned and stop turning.
                 // TODO: Might need tuning.
+                System.out.println("Turning for too long");
                 break;
             }
         }
@@ -47,19 +52,28 @@ public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
         System.out.println("Avoidance turn complete.");
 
         // We stop the robot.
+        Delay.msDelay(100);
         MotorControl.stopMotors();
-        // Check forward distance again.
+
         // TODO needs tuning
-        int SensorDistanceTolerance = 3;
+        MotorControl.setSpeed(MotorControl.mediumSpeed);
+        boolean didTurn = false;
         while (true) {
             Delay.msDelay(100);
-            if (SensorControl.getLeftSensorDistance() > (forward_distance + SensorDistanceTolerance)) {
+            int forward = SensorControl.getFrontSensorDistance();
+            if (forward > 0 && forward <= forward_distance - 5) {
+                handleCollision(forward_distance);
+            }
+            if (SensorControl.getLeftSensorDistance() > (forward_distance + SensorDistanceTolerance) && !didTurn) {
+                didTurn = true;
                 MotorControl.turnLeftInPlace();
-            } else if (SensorControl.getLeftSensorDistance() < (forward_distance - SensorDistanceTolerance)) {
+            } else if (SensorControl.getLeftSensorDistance() < (forward_distance - SensorDistanceTolerance) && !didTurn) {
+                didTurn = true;
                 MotorControl.turnRightInPlace();
             } else {
                 MotorControl.moveForward();
-                Delay.msDelay(100);
+                didTurn = false;
+                Delay.msDelay(200);
             }
 
         }
