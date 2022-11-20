@@ -38,7 +38,7 @@ public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
         while (distance >= forward_distance) {
             Delay.msDelay(100);
             distance = SensorControl.getLeftSensorDistance();
-            System.out.println(distance);
+            System.out.println("Distance: " + distance);
 
             turn_delay += 100;
             if (turn_delay > 10000) {
@@ -75,7 +75,6 @@ public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
                 didTurn = false;
                 Delay.msDelay(200);
             }
-
         }
     }
 }
