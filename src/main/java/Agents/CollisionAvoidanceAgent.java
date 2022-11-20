@@ -1,13 +1,21 @@
 package Agents;
 
+import Behaviours.CollisionAvoidanceBehaviour;
 import WarehouseRobot.MotorControl;
 import jade.core.Agent;
-
-import Behaviours.CollisionAvoidanceBehaviour;
 import jade.core.behaviours.CyclicBehaviour;
 
+/**
+ * This is a simple Agent which uses basic collision avoidance behaviour, as well as a cyclic behaviour to keep driving
+ * forward as long as no collision is detected.
+ *
+ * @author Maxim
+ * @author Anthony
+ * @version 1.0
+ * @see CollisionAvoidanceBehaviour
+ * @since 26/10/2022
+ */
 public class CollisionAvoidanceAgent extends Agent {
-    // TODO: Initialise RobComponents before the agent container starts. (In the container start file)
     @Override
     protected void setup() {
         addBehaviour(new CollisionAvoidanceBehaviour());

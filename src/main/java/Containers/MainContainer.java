@@ -8,49 +8,47 @@ import jade.util.leap.Properties;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 
+/**
+ * This is the main container class. It is responsible for creating the main container for our system.
+ * It essentially serves as the "server" for our system.
+ *
+ * @author Senne
+ * @author Maxim
+ * @author Anthony
+ * @author Thimoty
+ * @version 1.0
+ * @see jade.core.Runtime
+ * @see jade.util.ExtendedProperties
+ * @see jade.core.Profile
+ * @see jade.core.ProfileImpl
+ * @see jade.wrapper.AgentContainer
+ * @see jade.wrapper.AgentController
+ * @since 02/11/2022
+ */
 public class MainContainer {
-    /**
-     If you want to run the main container with a SimpleContainer you have to
-     . comment  MotorAgent, TouchAgent and ColorSensorAgent line 28 to 36
-     . de-comment  Agent1 line 25 to line 27
-     . Open the GUI by switching false to true (line 20) and in the start function comment  InitComps.configuration(); line 46
-     . Run MainContainer then SimpleContainer.
-     **/
     public static void main(String[] args) {
         try {
             Runtime runtime = Runtime.instance();
+
             Properties properties = new ExtendedProperties();
             properties.setProperty(Profile.GUI, "true");
             properties.setProperty(Profile.LOCAL_HOST, "192.168.0.181");
             properties.setProperty(Profile.LOCAL_PORT, "1099");
 
-
             Profile profile = new ProfileImpl(properties);
-            AgentContainer agentContainer=runtime.createMainContainer(profile);
+
+            AgentContainer agentContainer = runtime.createMainContainer(profile);
             MainContainer.start();
-            AgentController Agent1=agentContainer.createNewAgent("CommandAgent",
-                    "Agents.CommandAgent",new Object[]{});
+
+            AgentController Agent1 = agentContainer.createNewAgent("CommandAgent", "Agents.CommandAgent", new Object[]{});
             Agent1.start();
 
-
-            /*AgentController MotorAgent=agentContainer.createNewAgent("MotorAgent",
-                    "Examples.MotorAgent",new Object[]{});
-            AgentController TouchAgent=agentContainer.createNewAgent("TouchAgent",
-                    "Examples.TouchAgent",new Object[]{});
-            AgentController ColorSensorAgent=agentContainer.createNewAgent("ColorSensorAgent",
-                    "Examples.ColorSensorAgent",new Object[]{});
-            MotorAgent.start();
-            TouchAgent.start();
-            ColorSensorAgent.start();
-*/
-//
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
     public static void start() {
-
+        System.out.println("Main container started");
     }
 }
