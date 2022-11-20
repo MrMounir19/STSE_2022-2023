@@ -1,6 +1,5 @@
 package Behaviours;
 
-import ExampleAgentsSimple.Motor;
 import WarehouseRobot.MotorControl;
 import WarehouseRobot.SensorControl;
 import jade.core.behaviours.CyclicBehaviour;
