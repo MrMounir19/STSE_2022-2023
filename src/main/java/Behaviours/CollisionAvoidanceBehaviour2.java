@@ -59,6 +59,7 @@ public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
         MotorControl.setSpeed(MotorControl.mediumSpeed);
         boolean didTurn = false;
         while (true) {
+            // TODO: This never exits the loop? @Anthony @Senne
             Delay.msDelay(100);
             int forward = SensorControl.getFrontSensorDistance();
             if (forward > 0 && forward <= forward_distance - 5) {
