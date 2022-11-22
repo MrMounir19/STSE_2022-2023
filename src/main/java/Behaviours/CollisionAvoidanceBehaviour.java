@@ -1,19 +1,21 @@
 package Behaviours;
 
 import WarehouseRobot.MotorControl;
-import WarehouseRobot.RobComponents;
 import WarehouseRobot.SensorControl;
-import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.SequentialBehaviour;
-import jade.core.behaviours.SimpleBehaviour;
-import jade.lang.acl.ACLMessage;
 import lejos.utility.Delay;
 
-import static jade.lang.acl.ACLMessage.INFORM;
-
+/**
+ * This is a simple collision avoidance behaviour.
+ * The behaviour will first check if the robot is close to an obstacle.
+ * If this is the case, the robot will perform a turn towards the right, move until the obstacle is no longer detected
+ * and then turn back to the original direction before continuing.
+ *
+ * @author Maxim
+ * @author Anthony
+ * @version 1.0
+ * @since 26/10/2022
+ */
 public class CollisionAvoidanceBehaviour extends CyclicBehaviour {
     static private final int collisionDistance = 10;
 

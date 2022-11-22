@@ -1,31 +1,38 @@
 package Behaviours;
 
-import ExampleAgentsSimple.Motor;
 import WarehouseRobot.MotorControl;
-import WarehouseRobot.SensorControl;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.lang.acl.ACLMessage;
-import lejos.utility.Delay;
-import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import java.util.Objects;
 
+/**
+ * This is a simple command parsing behaviour.
+ * It parses received messages and, in case of a valid command, it performs the appropriate action.
+ *
+ * @author Maxim
+ * @author Senne
+ * @version 1.0
+ * @since 08/11/2022
+ */
 public class CommandBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
         ACLMessage message = myAgent.receive();
-        if (message!=null) {
+        if (message != null) {
             handleMessage(message);
-        }
-        else {
+        } else {
             block();
         }
     }
 
+    /**
+     * This method handles the received message, and performs the appropriate action (if any).
+     *
+     * @param message The received message. (ACLMessage)
+     * @see ACLMessage
+     */
     private void handleMessage(ACLMessage message) {
         String content = message.getContent();
 

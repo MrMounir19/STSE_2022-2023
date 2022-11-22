@@ -1,14 +1,22 @@
 package Agents;
 
-import Behaviours.CollisionAvoidanceBehaviour;
 import Behaviours.CollisionAvoidanceBehaviour2;
 import Behaviours.CommandBehaviour;
-import WarehouseRobot.MotorControl;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 
+/**
+ * This is a simple standard robot agent that is meant to control a robot on its own. (Without other agents)
+ * It uses the second version of our Collision Avoidance behaviour, as well as command (parsing) behaviour.
+ *
+ * @author Maxim
+ * @author Anthony
+ * @author Senne
+ * @version 1.0
+ * @see CollisionAvoidanceBehaviour2
+ * @see CommandBehaviour
+ * @since 08/11/2022
+ */
 public class RobotAgent extends Agent {
-    // TODO: Initialise RobComponents before the agent container starts. (In the container start file)
     @Override
     protected void setup() {
         addBehaviour(new CollisionAvoidanceBehaviour2());

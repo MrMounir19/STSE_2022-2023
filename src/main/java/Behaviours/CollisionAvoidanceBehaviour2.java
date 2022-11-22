@@ -5,7 +5,17 @@ import WarehouseRobot.SensorControl;
 import jade.core.behaviours.CyclicBehaviour;
 import lejos.utility.Delay;
 
-public class CollisionAvoidanceBehaviour2  extends CyclicBehaviour {
+/**
+ * This is a slightly more complex collision avoidance behaviour.
+ * The behaviour will first check if the robot is close to an obstacle.
+ * If this is the case, the robot will attempt to manoeuvre around the obstacle using a PID-esque algorithm.
+ *
+ * @author Anthony
+ * @author Senne
+ * @version 1.0
+ * @since 08/11/2022
+ */
+public class CollisionAvoidanceBehaviour2 extends CyclicBehaviour {
     static private final int collisionDistance = 15;
 
     @Override
