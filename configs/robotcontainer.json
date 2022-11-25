@@ -1,0 +1,4 @@
+{
+  "agents": ["RegistrationAgent"],
+  "use_timestamp": true
+}

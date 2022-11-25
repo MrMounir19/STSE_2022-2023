@@ -5,9 +5,7 @@ import com.google.gson.JsonParser;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RobotMessage {
     private static final JsonParser parser = new JsonParser();
@@ -48,7 +46,7 @@ public class RobotMessage {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(registration_broker_agent_id, AID.ISLOCALNAME)); // TODO correct agent
 
-        String payload = "{'messageType': 'collision', 'data': {'robot_id': " + action.toString() + "}}";
+        String payload = "{'messageType': 'collision', 'data': {'action': " + action.toString() + "}}";
 
         message.setContent(payload);
 

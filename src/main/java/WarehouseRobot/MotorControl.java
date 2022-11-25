@@ -16,11 +16,11 @@ public class MotorControl {
     static final public int slowSpeed = 50;
     static final public int mediumSpeed = 100;
     static final public int fastSpeed = 400;
-    static int speed = 250;
+    static int speed = 100;
     static int leftWheelModifier = 1;
     static int rightWheelModifier = 1;
     static int controlDelayMs = 1;
-    static int invertControls = -1; // 1 or -1
+    static int invertControls = 1; // 1 or -1
 
     /**
      * Applies the given speed to the motors.
