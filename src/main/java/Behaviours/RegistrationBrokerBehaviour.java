@@ -1,12 +1,11 @@
 package Behaviours;
 
-import com.google.gson.JsonObject;
+import WarehouseServer.RobotRegistrationStorage;
 import jade.core.AID;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import Utils.RobotMessage;
+import Utils.Messages;
 
-import java.util.ArrayList;
 
 
 /**
@@ -14,60 +13,35 @@ import java.util.ArrayList;
  * It receives a ping from a new robot on the network and registers it.
  *
  * @author Maxim
+ * @author Thimoty
  * @version 1.0
  * @since 23/11/2022
  */
-public class RegistrationBrokerBehaviour extends CyclicBehaviour {
+public class RegistrationBrokerBehaviour extends OneShotBehaviour {
+    ACLMessage message;
 
-    ArrayList<String> tempArray = new ArrayList<>(); // TODO: Get List of registered Robots
+    RegistrationBrokerBehaviour (ACLMessage message){
+        this.message = message;
+    }
 
     @Override
     public void action() {
-        ACLMessage message = myAgent.receive();
-        if (message != null) {
-            handleMessage(message);
-        } else {
-            block();
-        }
+        handleMessage();
     }
 
     /**
-     * This method handles the received message, and registers the robot if it is a valid registration message.
-     *
-     * @param message The received message. (ACLMessage)
-     * @see ACLMessage
+     * This method handles the received message, and registers the robot with the server.
      */
-    private void handleMessage(ACLMessage message) {
-        String content = message.getContent();
-        AID sender = message.getSender();
-        String robot_id = sender.getName(); // TODO: Might be getLocalName() instead? (If not unique due to Agent names)
+    private void handleMessage() {
+        AID sender = this.message.getSender();
+        String robot_id = sender.getLocalName();
 
-        JsonObject jsonContent = RobotMessage.toJson(content);
-        String messageType = jsonContent.get("messageType").getAsString();
-
-        System.out.println("RegistrationBroker: " + content);
-
-        if (!messageType.equals("registration")) {
-            System.out.println("MessageType is not a registration");
+        if (RobotRegistrationStorage.checkRobot(robot_id)) {
+            System.out.println(robot_id +" is already registered");
             return;
         }
 
-        if (checkRobot(robot_id)) {
-            System.out.println("Robot already registered");
-            return;
-        }
-
-        addRobot(robot_id);
-    }
-
-    public void addRobot(String robotID) {
-        //Adds the robot to the list
-        System.out.println("Registered robot with id: " + robotID);
-        tempArray.add(robotID);
-    }
-
-    public boolean checkRobot(String robotID){
-        //Returns true if robot id is in the list
-        return tempArray.contains(robotID);
+        RobotRegistrationStorage.addRobot(robot_id);
+        myAgent.send(Messages.registrationConfirmationMessage(robot_id));
     }
 }

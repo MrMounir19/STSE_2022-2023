@@ -5,6 +5,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+// TODO: See if we can fix this.
 public class RobotNetwork {
     public static String getLocalHost() {
         Enumeration<NetworkInterface> ni_enumeration = null;

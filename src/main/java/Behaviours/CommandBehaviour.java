@@ -16,7 +16,6 @@ import java.util.Objects;
  * @since 08/11/2022
  */
 public class CommandBehaviour extends CyclicBehaviour {
-
     @Override
     public void action() {
         ACLMessage message = myAgent.receive();

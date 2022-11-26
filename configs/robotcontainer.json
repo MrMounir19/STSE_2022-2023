@@ -1,4 +1,4 @@
 {
-  "agents": ["RegistrationAgent"],
+  "agents": ["RobotAgent"],
   "use_timestamp": true
 }

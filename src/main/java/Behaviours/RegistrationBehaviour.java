@@ -1,19 +1,12 @@
 package Behaviours;
 
-import Utils.RobotMessage;
-import com.google.gson.JsonObject;
-import jade.core.AID;
+import Utils.Messages;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.wrapper.AgentController;
-import jade.wrapper.StaleProxyException;
-
-import java.util.ArrayList;
 
 
 /**
  * This is a simple robot registration behaviour.
- * It receives a ping from a new robot on the network and registers it.
+ * It is called once when the robot joins the network, and facilitates the registration of the robot with the server.
  *
  * @author Maxim
  * @version 1.0
@@ -22,6 +15,6 @@ import java.util.ArrayList;
 public class RegistrationBehaviour extends OneShotBehaviour {
     @Override
     public void action() {
-        myAgent.send(RobotMessage.registrationMessage());
+        myAgent.send(Messages.registrationMessage());
     }
 }

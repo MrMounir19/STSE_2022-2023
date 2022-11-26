@@ -1,6 +1,6 @@
 package Containers;
 
-import Utils.RobotMessage;
+import Utils.Messages;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import jade.core.Profile;
@@ -18,6 +18,14 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 
+/**
+ * Parent of all containers, named BaseContainer.
+ * New containers can be made by extending from this class.
+ * @author Maxim
+ * @author Thimoty
+ * @version 1.0
+ * @since 25/11/2022
+ */
 public class BaseContainer {
     protected ArrayList<AgentController> agents = new ArrayList<>();
     protected AgentContainer agentContainer = null;
@@ -28,7 +36,7 @@ public class BaseContainer {
 
     public BaseContainer() {
         String defaultConfig = "{'agents': [], 'use_timestamp': true}";
-        this.config = RobotMessage.toJson(defaultConfig);
+        this.config = Messages.toJson(defaultConfig);
     }
 
     public void setConfigFromPath(String path) {
@@ -40,7 +48,7 @@ public class BaseContainer {
             throw new RuntimeException(e);
         }
 
-        this.setConfig(RobotMessage.toJson(configContent));
+        this.setConfig(Messages.toJson(configContent));
     }
 
     public void setConfig(JsonObject config) {

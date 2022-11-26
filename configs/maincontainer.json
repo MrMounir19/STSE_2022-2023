@@ -1,4 +1,4 @@
 {
-  "agents": ["RegistrationBrokerAgent"],
+  "agents": ["ServerAgent"],
   "use_timestamp": false
 }

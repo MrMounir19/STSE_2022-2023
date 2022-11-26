@@ -7,10 +7,17 @@ import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
 
-public class RobotMessage {
+/**
+ * Util class to create messages of the system
+ *
+ * @author Maxim
+ * @author Thimoty
+ * @since 23/11/2022
+ */
+public class Messages {
+    private static final String serverAgent = "ServerAgent";
+
     private static final JsonParser parser = new JsonParser();
-    private static final String registration_broker_agent_id = "RegistrationBrokerAgent";
-    private static final String job_broker_id = "JobBrokerAgent";
 
     public static JsonObject toJson(String message) {
         return parser.parse(message).getAsJsonObject();
@@ -20,9 +27,12 @@ public class RobotMessage {
         return jsonObject.getAsString();
     }
 
+    /**
+     * Message used by robots to register themselves to the system
+     */
     public static ACLMessage registrationMessage() {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-        message.addReceiver(new AID(registration_broker_agent_id, AID.ISLOCALNAME));
+        message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
 
         String payload = "{'messageType': 'registration'}";
 
@@ -31,9 +41,26 @@ public class RobotMessage {
         return message;
     }
 
-    public static ACLMessage jobMessage(Job job_type, ArrayList<int[]> path) {
+    /**
+     * Message used by the server to confirm the registration of a robot
+     */
+    public static ACLMessage registrationConfirmationMessage(String targetAgent) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-        message.addReceiver(new AID(job_broker_id, AID.ISLOCALNAME));
+        message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
+
+        String payload = "{'messageType': 'registrationConfirmation', 'data': {'serverAgentName': '" + serverAgent + "'}}";
+
+        message.setContent(payload);
+
+        return message;
+    }
+
+    /**
+     * TODO: What is this message for?
+     */
+    public static ACLMessage jobMessage(String target_agent, Job job_type, ArrayList<int[]> path) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.addReceiver(new AID(target_agent, AID.ISLOCALNAME));
 
         String payload = "{'messageType': 'job', 'data': {'action': '" + job_type.toString() + "', 'path': " + path.toString() + "}}";
 
@@ -42,9 +69,13 @@ public class RobotMessage {
         return message;
     }
 
+
+    /**
+     * TODO: What is this message for?
+     */
     public static ACLMessage collisionMessage(CollisionAction action) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-        message.addReceiver(new AID(registration_broker_agent_id, AID.ISLOCALNAME)); // TODO correct agent
+        message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
 
         String payload = "{'messageType': 'collision', 'data': {'action': " + action.toString() + "}}";
 
