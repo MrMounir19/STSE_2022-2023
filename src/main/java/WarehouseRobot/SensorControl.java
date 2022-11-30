@@ -3,6 +3,15 @@ package WarehouseRobot;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
+/**
+ * This class is used to control the sensors of the robot.
+ *
+ * @author Maxim
+ * @author Anthony
+ * @version 1.0
+ * @see RobComponents
+ * @since 28/10/2022
+ */
 public class SensorControl {
 
     /**
