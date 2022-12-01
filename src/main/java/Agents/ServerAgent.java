@@ -1,7 +1,12 @@
 package Agents;
 
 import Behaviours.ServerMessageParserBehaviour;
+import Behaviours.UWBReceivingBehaviour;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.ThreadedBehaviourFactory;
+
+import java.util.Iterator;
 
 /**
  * This agent is used for the server.
@@ -13,8 +18,13 @@ import jade.core.Agent;
  * @since 26/11/2022
  */
 public class ServerAgent extends Agent {
+    private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
     @Override
     protected void setup() {
-        addBehaviour(new ServerMessageParserBehaviour());
+        Behaviour serverMessageParserBehaviour = new ServerMessageParserBehaviour();
+        Behaviour uwbReceivingBehaviour = new UWBReceivingBehaviour();
+        addBehaviour(tbf.wrap(serverMessageParserBehaviour));
+        addBehaviour(tbf.wrap(uwbReceivingBehaviour));
+
     }
 }

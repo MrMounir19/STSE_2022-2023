@@ -10,18 +10,26 @@ import java.util.ArrayList;
  */
 public class RobotRegistrationStorage {
 
-    public static ArrayList<String> registeredRobots = new ArrayList<>();
+    public static ArrayList<RobotObject> registeredRobots = new ArrayList<>();
 
     public static void addRobot(String robotID) {
         //Adds the robot to the list
         System.out.println("Registered robot with id: " + robotID);
-        registeredRobots.add(robotID);
+        registeredRobots.add(new RobotObject(robotID));
         System.out.println("Registered robots: " + registeredRobots);
     }
 
     public static boolean checkRobot(String robotID){
         //Returns true if robot id is in the list
-        return registeredRobots.contains(robotID);
+        for (RobotObject robot : registeredRobots) {
+            if (robot.getRobotId().equals(robotID)) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    public static void updateRobotPosition(String uwbID, float x, float y) {
+
+    }
 }
