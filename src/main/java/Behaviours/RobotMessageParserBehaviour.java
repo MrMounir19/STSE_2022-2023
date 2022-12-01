@@ -1,10 +1,15 @@
 package Behaviours;
 
+import Utils.Job;
 import Utils.Messages;
+import WarehouseRobot.RobotInformation;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -63,7 +68,12 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
     }
 
     private void handleJobMessage(ACLMessage message) {
-
+        JsonParser j = new JsonParser();
+        Gson gson = new Gson();
+        JsonObject payload = j.parse(message.getContent()).getAsJsonObject();
+        JsonObject data = payload.getAsJsonObject("data");
+        Job job =  gson.fromJson(data, Job.class);
+        RobotInformation.addJob(job);
     }
 
 }

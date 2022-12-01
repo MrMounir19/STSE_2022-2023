@@ -1,6 +1,8 @@
 package Behaviours;
 
+import WarehouseRobot.RobotInformation;
 import WarehouseServer.RobotRegistrationStorage;
+import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import org.eclipse.paho.client.mqttv3.*;
 
@@ -42,12 +44,19 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                     List<JsonObject> robots = msgToObjects(message);
                     for (JsonObject robot: robots) {
                         if (robot.get("success").getAsBoolean()){
+
+
                             JsonObject data = robot.getAsJsonObject("data");
                             JsonObject value = data.getAsJsonObject("value");
                             JsonObject coordinates = value.getAsJsonObject("coordinates");
                             JsonObject orientation = value.getAsJsonObject("orientation");
-                            RobotRegistrationStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
-                            System.out.println("Updating position of: " +  robot.get("tagId").getAsString());
+                            if (myAgent.getAID().getName().contains("ServerAgent")) {
+                                RobotRegistrationStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
+                            } else {
+                                if (data.get("tagId").getAsString().equals(RobotInformation.getUwbID())) {
+                                    RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
+                                }
+                            }
                         }
                     }
                 }
