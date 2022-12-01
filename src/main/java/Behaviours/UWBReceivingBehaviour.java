@@ -21,6 +21,7 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
 
         MemoryPersistence persistence = new MemoryPersistence();
 
+        //TODO cleanup messaging
         try {
             MqttClient mqttClient = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
@@ -34,17 +35,21 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
 
             mqttClient.setCallback(new MqttCallback() {
                 public void connectionLost(Throwable cause) {
-                    System.out.println("Connection lost");
-                    System.out.println(cause);
+//                    System.out.println("Connection lost");
+//                    System.out.println(cause);
                 }
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    System.out.println("Positioning update: " + message.toString());
                     List<JsonObject> robots = msgToObjects(message);
                     for (JsonObject robot: robots) {
-
-                        RobotRegistrationStorage.updateRobotPosition(robot.get("tagId"), robot.get("data"));
+                        if (robot.get("success").getAsBoolean()){
+                            JsonObject data = robot.getAsJsonObject("data");
+                            JsonObject value = data.getAsJsonObject("value");
+                            JsonObject coordinates = value.getAsJsonObject("coordinates");
+                            JsonObject orientation = value.getAsJsonObject("orientation");
+                            RobotRegistrationStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
+                            System.out.println("Updating position of: " +  robot.get("tagId").getAsString());
+                        }
                     }
-                    System.out.println("Test");
                 }
                 public void deliveryComplete(IMqttDeliveryToken token) {
                     System.out.println("Delivery complete");

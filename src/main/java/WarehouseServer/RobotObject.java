@@ -5,7 +5,7 @@ public class RobotObject {
     public float xPosition;
     public float yPosition;
     public String uwbID;
-
+    public float yaw;
     public RobotObject(String id) {
         robotId = id;
     }
@@ -14,8 +14,13 @@ public class RobotObject {
         return robotId;
     }
 
-    public void setRobotPosition(float x, float y) {
+    public String getUwbID() {
+        return uwbID;
+    }
+
+    public void setRobotPosition(float x, float y, float orientation) {
         xPosition = x;
         yPosition = y;
+        yaw = orientation;
     }
 }

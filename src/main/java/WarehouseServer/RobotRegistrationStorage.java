@@ -29,7 +29,11 @@ public class RobotRegistrationStorage {
         return false;
     }
 
-    public static void updateRobotPosition(String uwbID, float x, float y) {
-
+    public static void updateRobotPosition(String uwbID, float x, float y, float orientation) {
+        for (RobotObject robot : registeredRobots) {
+            if (robot.getUwbID().equals(uwbID)) {
+                robot.setRobotPosition(x,y,orientation);
+            }
+        }
     }
 }
