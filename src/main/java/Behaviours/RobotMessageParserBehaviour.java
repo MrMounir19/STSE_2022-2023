@@ -55,7 +55,7 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
         if (Objects.equals(messageType, "registrationConfirmation")) {
             handleRegistrationConfirmationMessage(message);
 
-        } else if(Objects.equals(messageType, "job")){
+        } else if(Objects.equals(messageType, "JobAction")){
             handleJobMessage(message);
         }else {
             System.out.println("Received message type not valid for robot.");

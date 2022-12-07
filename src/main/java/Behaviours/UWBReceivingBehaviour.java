@@ -44,8 +44,6 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                     List<JsonObject> robots = msgToObjects(message);
                     for (JsonObject robot: robots) {
                         if (robot.get("success").getAsBoolean()){
-
-
                             JsonObject data = robot.getAsJsonObject("data");
                             JsonObject value = data.getAsJsonObject("value");
                             JsonObject coordinates = value.getAsJsonObject("coordinates");
@@ -59,6 +57,7 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                             }
                         }
                     }
+                    System.out.println("Test");
                 }
                 public void deliveryComplete(IMqttDeliveryToken token) {
                     System.out.println("Delivery complete");

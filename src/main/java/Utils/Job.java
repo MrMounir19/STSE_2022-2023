@@ -3,16 +3,16 @@ package Utils;
 import java.util.ArrayList;
 
 public class Job {
-    public String type;
+    public String action;
     //TODO fix with tuples or something
     public ArrayList<ArrayList<Integer>> path;
 
-    public String getType() {
-        return type;
+    public String getAction() {
+        return action;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAction(String action) {
+        this.action = action;
     }
 
     public ArrayList<ArrayList<Integer>> getPath() {
