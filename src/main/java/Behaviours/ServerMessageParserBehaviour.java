@@ -1,6 +1,7 @@
 package Behaviours;
 
 
+import Enums.MessageType;
 import Utils.Messages;
 import com.google.gson.JsonObject;
 import jade.core.behaviours.CyclicBehaviour;
@@ -34,11 +35,11 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
         // TODO: Catch MalformedJsonException (Can occur when receiving error message (for example when sending message to container/agent that no longer exists))
         payload = Messages.toJson(content);
 
-        String messageType = payload.get("messageType").getAsString();
+        MessageType messageType = MessageType.valueOf(payload.get("messageType").getAsString());
 
-        if (Objects.equals(messageType, "registration")) {
+        if (messageType == MessageType.Registration) {
             handleRegistrationMessage(message);
-        } else if (Objects.equals(messageType, "collision")){
+        } else if (messageType == MessageType.Collision){
             handleCollisionMessage(message);
         } else {
             System.out.println("Received message type not valid for server.");
