@@ -1,6 +1,6 @@
 package Behaviours;
 
-import Utils.Job;
+import WarehouseShared.Job;
 import Utils.Messages;
 import WarehouseRobot.RobotInformation;
 import com.google.gson.Gson;
@@ -9,7 +9,6 @@ import com.google.gson.JsonParser;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**

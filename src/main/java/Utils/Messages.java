@@ -1,5 +1,7 @@
 package Utils;
 
+import Enums.CollisionAction;
+import Enums.JobType;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jade.core.AID;
@@ -58,7 +60,7 @@ public class Messages {
     /**
      * TODO: What is this message for?
      */
-    public static ACLMessage jobMessage(String target_agent, Job job_type, ArrayList<int[]> path) {
+    public static ACLMessage jobMessage(String target_agent, JobType job_type, ArrayList<int[]> path) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(target_agent, AID.ISLOCALNAME));
 

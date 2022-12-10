@@ -2,7 +2,7 @@ package Agents;
 
 import Behaviours.ServerMessageParserBehaviour;
 import Behaviours.UWBReceivingBehaviour;
-import Utils.Job;
+import WarehouseShared.Job;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -14,10 +14,6 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.lang.acl.ACLMessage;
 import lejos.utility.Delay;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * This agent is used for the server.
