@@ -1,4 +1,4 @@
-package Behaviours;
+package Behaviours.Deprecated;
 
 import WarehouseRobot.MotorControl;
 import jade.core.behaviours.CyclicBehaviour;
