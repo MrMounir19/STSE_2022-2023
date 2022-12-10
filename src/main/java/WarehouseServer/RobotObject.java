@@ -1,10 +1,11 @@
 package WarehouseServer;
 
+import WarehouseShared.Position;
+
 public class RobotObject {
     public String robotId;
-    public float xPosition;
-    public float yPosition;
     public String uwbID;
+    public Position position;
     public float yaw;
     public RobotObject(String id) {
         robotId = id;
@@ -19,8 +20,7 @@ public class RobotObject {
     }
 
     public void setRobotPosition(float x, float y, float orientation) {
-        xPosition = x;
-        yPosition = y;
+        position = new Position(x, y);
         yaw = orientation;
     }
 }
