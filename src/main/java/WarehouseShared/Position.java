@@ -15,4 +15,8 @@ public class Position {
         this.x = x;
         this.y = y;
     }
+
+    public float distanceTo(Position other) {
+        return (float) Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+    }
 }
