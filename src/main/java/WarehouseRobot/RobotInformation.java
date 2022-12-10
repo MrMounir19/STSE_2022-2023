@@ -5,7 +5,9 @@ import WarehouseShared.Position;
 
 import java.util.ArrayList;
 
-//TODO Maybe merge with server robotobject but depends on separate functionality
+// TODO Maybe merge with server robotobject but depends on separate functionality
+// From @Maxim:
+// Could use a RobotObject instead of most of this, and keep jobs? (Or reuse WarehouseServer.JobStorage)
 public class RobotInformation {
     public static String robotId;
     public static String uwbID;
