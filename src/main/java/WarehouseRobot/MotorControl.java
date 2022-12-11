@@ -90,4 +90,10 @@ public class MotorControl {
         RobComponents.motorL.forward();
         RobComponents.motorR.forward();
     }
+
+    public static void moveForwardPrecise(int speed, float leftSpeedMultiplier, float rightSpeedMultiplier) {
+        RobComponents.motorL.setSpeed((int) (invertControls * speed * leftSpeedMultiplier));
+        RobComponents.motorR.setSpeed((int) (invertControls * speed * rightSpeedMultiplier));
+        Delay.msDelay(controlDelayMs);
+    }
 }

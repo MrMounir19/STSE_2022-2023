@@ -42,12 +42,17 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                 }
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     List<JsonObject> robots = msgToObjects(message);
+                    System.out.println("Message arrived");
                     for (JsonObject robot: robots) {
                         if (robot.get("success").getAsBoolean()){
                             JsonObject data = robot.getAsJsonObject("data");
                             JsonObject value = data.getAsJsonObject("value");
                             JsonObject coordinates = value.getAsJsonObject("coordinates");
                             JsonObject orientation = value.getAsJsonObject("orientation");
+                            //Master tag
+                            if (data.get("tagId").getAsString().equals("26702")) {
+                                RobotInformation.setMasterPosition(coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat());
+                            }
                             if (myAgent.getAID().getName().contains("ServerAgent")) {
                                 RobotRegistrationStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                             } else {

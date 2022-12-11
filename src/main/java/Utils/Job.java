@@ -6,6 +6,8 @@ public class Job {
     public String action;
     //TODO fix with tuples or something
     public ArrayList<ArrayList<Integer>> path;
+    public ArrayList<Integer> currentGoal = null;
+
 
     public String getAction() {
         return action;
@@ -21,6 +23,18 @@ public class Job {
 
     public void setPath(ArrayList<ArrayList<Integer>> path) {
         this.path = path;
+    }
+
+    public ArrayList<Integer> getCurrentGoal() {
+        if (currentGoal == null) {
+            currentGoal = path.remove(0);
+        }
+        return currentGoal;
+
+    }
+
+    public void setCurrentGoal(ArrayList<Integer> currentGoal) {
+        this.currentGoal = currentGoal;
     }
 }
 
