@@ -30,9 +30,9 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
             mqttConnectOptions.setUserName(topic);
             mqttConnectOptions.setPassword(apiKey.toCharArray());
 
-            System.out.println("Connecting to broker: "+broker);
+//            System.out.println("Connecting to broker: "+broker);
             mqttClient.connect(mqttConnectOptions);
-            System.out.println("Connected");
+//            System.out.println("Connected");
 
             mqttClient.setCallback(new MqttCallback() {
                 public void connectionLost(Throwable cause) {
@@ -41,14 +41,11 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                 }
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     List<JsonObject> robots = msgToObjects(message);
-                    System.out.println("Message arrived");
                     for (JsonObject robot: robots) {
                         if (robot.get("success").getAsBoolean()){
                             JsonObject data = robot.getAsJsonObject("data");
                             JsonObject coordinates = data.getAsJsonObject("coordinates");
                             JsonObject orientation = data.getAsJsonObject("orientation");
-                            System.out.println(robot.get("tagId"));
-                            System.out.println(coordinates.toString());
                             //Master tag
                             if (robot.get("tagId").getAsString().equals("26702")) {
                                 RobotInformation.setMasterPosition(coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat());
@@ -56,7 +53,8 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                             if (myAgent.getAID().getName().contains("ServerAgent")) {
                                 RobotStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                             } else {
-                                if (robot.get("tagId").getAsString().equals(RobotInformation.getUwbID())) {
+                                //TODO not hardcoded
+                                if (robot.get("tagId").getAsString().equals("26689")) {
                                     RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                                 }
                             }
@@ -68,9 +66,9 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                 }
             });
 
-            System.out.println("Subscribing to topic: "+topic);
+//            System.out.println("Subscribing to topic: "+topic);
             mqttClient.subscribe(topic);
-            System.out.println("Subscribed to topic: "+topic);
+//            System.out.println("Subscribed to topic: "+topic);
         } catch(MqttException me) {
             System.out.println("reason "+me.getReasonCode());
             System.out.println("msg "+me.getMessage());

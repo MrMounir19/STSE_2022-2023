@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Job {
     protected int id;
     protected JobType action;
-    public ArrayList<Position> path;
+    public ArrayList<Position> path = new ArrayList<Position>();
     protected Position sourcePosition;
     public LocalTime startTime;
     public LocalTime finishedTime;

@@ -17,9 +17,9 @@ public class RobotInformation {
     public static float yaw;
     public static boolean isInitialized = false;
 
-    public static ArrayList<Position> positionHistory;
+    public static ArrayList<Position> positionHistory = new ArrayList<Position>();
     public static double orientation;
-    public static ArrayList<Job> jobs;
+    public static ArrayList<Job> jobs = new ArrayList<Job>();
 
     public static Job currentJob = null;
 

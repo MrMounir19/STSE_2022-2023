@@ -29,9 +29,9 @@ public class RobotContainer extends BaseContainer {
     protected void createProperties() {
         properties = new ExtendedProperties();
         properties.setProperty(Profile.GUI, "false");
-        properties.setProperty(Profile.MAIN_HOST, "127.0.0.1");
+        properties.setProperty(Profile.MAIN_HOST, "192.168.0.174");
         properties.setProperty(Profile.MAIN_PORT, "1099");
-        properties.setProperty(Profile.LOCAL_HOST, "127.0.0.1");
+        properties.setProperty(Profile.LOCAL_HOST, "192.168.0.111");
         properties.setProperty(Profile.LOCAL_PORT, "1099");
 //        properties.setProperty(Profile.PLATFORM_ID, null);
     }
