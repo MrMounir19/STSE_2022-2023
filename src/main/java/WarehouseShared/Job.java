@@ -83,10 +83,27 @@ public class Job {
 
     public Position getCurrentGoal() {
         if (currentGoal == null) {
-            currentGoal = path.remove(0);
+            if (path.size() > 0){
+                currentGoal = path.get(0);
+            }
+            else {
+                return null;
+            }
         }
         return currentGoal;
+    }
 
+    public void advanceGoal(){
+        /*
+        Call this function when you have reached the current goal, this will make the next call of getCurrentGoal()
+        return the next position of the path
+         */
+        path.remove(0);
+        setCurrentGoal(null);
+    }
+
+    public Boolean GoalFinished(){
+        return ((path.size() == 0) && (currentGoal == null));
     }
 
     public void setCurrentGoal(Position currentGoal) {
