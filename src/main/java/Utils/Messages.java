@@ -1,5 +1,9 @@
 package Utils;
 
+import Enums.CollisionAction;
+import Enums.JobType;
+import Enums.MessageType;
+import WarehouseShared.Job;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jade.core.AID;
@@ -15,7 +19,7 @@ import java.util.ArrayList;
  * @since 23/11/2022
  */
 public class Messages {
-    private static final String serverAgent = "ServerAgent";
+    public static String serverAgent = "ServerAgent";
 
     private static final JsonParser parser = new JsonParser();
 
@@ -34,7 +38,7 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': 'registration'}";
+        String payload = "{'messageType': '" + MessageType.Registration + "'}";
 
         message.setContent(payload);
 
@@ -48,27 +52,12 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': 'registrationConfirmation', 'data': {'serverAgentName': '" + serverAgent + "'}}";
+        String payload = "{'messageType': '" + MessageType.RegistrationConfirmation + "', 'data': {'serverAgentName': '" + serverAgent + "'}}";
 
         message.setContent(payload);
 
         return message;
     }
-
-    /**
-     * TODO: What is this message for?
-     */
-    public static ACLMessage jobMessage(String target_agent, Job job_type, ArrayList<int[]> path) {
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-        message.addReceiver(new AID(target_agent, AID.ISLOCALNAME));
-
-        String payload = "{'messageType': 'job', 'data': {'action': '" + job_type.toString() + "', 'path': " + path.toString() + "}}";
-
-        message.setContent(payload);
-
-        return message;
-    }
-
 
     /**
      * TODO: What is this message for?
@@ -77,7 +66,40 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': 'collision', 'data': {'action': " + action.toString() + "}}";
+        String payload = "{'messageType': '" + MessageType.Collision + "', 'data': {'action': " + action.toString() + "}}";
+
+        message.setContent(payload);
+
+        return message;
+    }
+
+    public static ACLMessage requestJobMessage() {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
+
+        String payload = "{'messageType': '" + MessageType.JobRequest + "'}";
+
+        message.setContent(payload);
+
+        return message;
+    }
+
+    public static ACLMessage assignJobMessage(String targetAgent, Job job) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
+
+        String payload = "{'messageType': '" + MessageType.Job + "', 'data': " + job.getJsonString() + "}";
+
+        message.setContent(payload);
+
+        return message;
+    }
+
+    public static ACLMessage finishedJobMessage(Job job) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
+
+        String payload = "{'messageType': '" + MessageType.Job + "', 'data': " + job.getAction() + "}";
 
         message.setContent(payload);
 

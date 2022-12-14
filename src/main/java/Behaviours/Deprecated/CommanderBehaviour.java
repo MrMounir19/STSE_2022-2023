@@ -1,4 +1,4 @@
-package Behaviours;
+package Behaviours.Deprecated;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
