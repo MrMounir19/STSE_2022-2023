@@ -1,6 +1,6 @@
 package Behaviours;
 
-import WarehouseServer.RobotRegistrationStorage;
+import WarehouseServer.RobotStorage;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -20,7 +20,7 @@ import Utils.Messages;
 public class RegistrationBrokerBehaviour extends OneShotBehaviour {
     ACLMessage message;
 
-    RegistrationBrokerBehaviour (ACLMessage message){
+    RegistrationBrokerBehaviour (ACLMessage message) {
         this.message = message;
     }
 
@@ -36,12 +36,12 @@ public class RegistrationBrokerBehaviour extends OneShotBehaviour {
         AID sender = this.message.getSender();
         String robot_id = sender.getLocalName();
 
-        if (RobotRegistrationStorage.checkRobot(robot_id)) {
+        if (RobotStorage.checkRobot(robot_id)) {
             System.out.println(robot_id +" is already registered");
             return;
         }
 
-        RobotRegistrationStorage.addRobot(robot_id);
+        RobotStorage.addRobot(robot_id);
         myAgent.send(Messages.registrationConfirmationMessage(robot_id));
     }
 }

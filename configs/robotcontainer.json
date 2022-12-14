@@ -1,4 +1,5 @@
 {
   "agents": ["RobotAgent"],
-  "use_timestamp": true
+  "use_timestamp": true,
+  "uwb_id": 1234
 }

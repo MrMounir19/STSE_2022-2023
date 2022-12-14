@@ -1,6 +1,10 @@
 package Behaviours;
 
+import Enums.MessageType;
+import WarehouseShared.Job;
 import Utils.Messages;
+import WarehouseRobot.RobotInformation;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -45,25 +49,33 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
             return;
         }
 
-        String messageType = payload.get("messageType").getAsString();
+        MessageType messageType = MessageType.valueOf(payload.get("messageType").getAsString());
 
-        if (Objects.equals(messageType, "registrationConfirmation")) {
+        if (messageType == MessageType.RegistrationConfirmation) {
             handleRegistrationConfirmationMessage(message);
 
-        } else if(Objects.equals(messageType, "job")){
+        } else if(messageType == MessageType.Job){
             handleJobMessage(message);
-        }else {
+        } else {
             System.out.println("Received message type not valid for robot.");
         }
     }
 
     private void handleRegistrationConfirmationMessage(ACLMessage message) {
         serverAgentName = message.getSender().getLocalName();
+        Messages.serverAgent = serverAgentName;
         System.out.println("Received registration confirmation. Server agent name is: " + serverAgentName);
     }
 
     private void handleJobMessage(ACLMessage message) {
+        // TODO: Handle if already working on a job.
+        JsonObject payload = Messages.toJson(message.getContent());
+        JsonObject data = payload.getAsJsonObject("data");
 
+        Gson gson = new Gson();
+        Job job =  gson.fromJson(data, Job.class);
+
+        RobotInformation.addJob(job);
     }
 
 }

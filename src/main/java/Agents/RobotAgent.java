@@ -1,8 +1,12 @@
 package Agents;
 
+import Behaviours.GeneralRobotBehaviour;
 import Behaviours.RegistrationBehaviour;
 import Behaviours.RobotMessageParserBehaviour;
+import Behaviours.UWBReceivingBehaviour;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.ThreadedBehaviourFactory;
 
 /**
  * This agent is used for the robot.
@@ -15,10 +19,18 @@ import jade.core.Agent;
  * @since 26/11/2022
  */
 public class RobotAgent extends Agent {
+    private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
     @Override
     protected void setup() {
-        addBehaviour(new RegistrationBehaviour());
-        addBehaviour(new RobotMessageParserBehaviour());
+        Behaviour registrationBehaviour = new RegistrationBehaviour();
+        Behaviour robotmessageParserBehaviour = new RobotMessageParserBehaviour();
+        Behaviour uwbReceivingBehaviour = new UWBReceivingBehaviour();
+        Behaviour generalRobotBehaviour = new GeneralRobotBehaviour();
+
+        addBehaviour(tbf.wrap(registrationBehaviour));
+        addBehaviour(tbf.wrap(robotmessageParserBehaviour));
+        addBehaviour(tbf.wrap(uwbReceivingBehaviour));
+        addBehaviour(tbf.wrap(generalRobotBehaviour));
         //TODO: Add collision behaviour?
     }
 }

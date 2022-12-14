@@ -1,4 +1,8 @@
 package Containers;
+import java.net.*;
+import java.io.*;
+import java.util.*;
+import java.net.InetAddress;
 
 /**
  * This is the main container class. It is responsible for creating the main container for our system.
@@ -13,7 +17,7 @@ package Containers;
  * @since 02/11/2022
  */
 public class MainContainer extends BaseContainer {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         MainContainer mainContainer = new MainContainer();
         mainContainer.setConfigFromPath("./configs/maincontainer.json");
         mainContainer.start();
