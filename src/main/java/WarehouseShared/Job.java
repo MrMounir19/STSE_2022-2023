@@ -9,10 +9,11 @@ import java.util.ArrayList;
 public class Job {
     protected int id;
     protected JobType action;
-    protected ArrayList<Position> path;
+    public ArrayList<Position> path;
     protected Position sourcePosition;
     public LocalTime startTime;
     public LocalTime finishedTime;
+    public Position currentGoal = null;
 
     public void setId(int id) {
         this.id = id;
@@ -78,6 +79,18 @@ public class Job {
     //TO DO: Add payload information
     public String getJsonString() {
         return "";
+    }
+
+    public Position getCurrentGoal() {
+        if (currentGoal == null) {
+            currentGoal = path.remove(0);
+        }
+        return currentGoal;
+
+    }
+
+    public void setCurrentGoal(Position currentGoal) {
+        this.currentGoal = currentGoal;
     }
 }
 

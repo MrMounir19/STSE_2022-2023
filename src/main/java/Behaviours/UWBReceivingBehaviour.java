@@ -45,23 +45,23 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                     for (JsonObject robot: robots) {
                         if (robot.get("success").getAsBoolean()){
                             JsonObject data = robot.getAsJsonObject("data");
-                            JsonObject value = data.getAsJsonObject("value");
-                            JsonObject coordinates = value.getAsJsonObject("coordinates");
-                            JsonObject orientation = value.getAsJsonObject("orientation");
+                            JsonObject coordinates = data.getAsJsonObject("coordinates");
+                            JsonObject orientation = data.getAsJsonObject("orientation");
+                            System.out.println(robot.get("tagId"));
+                            System.out.println(coordinates.toString());
                             //Master tag
-                            if (data.get("tagId").getAsString().equals("26702")) {
+                            if (robot.get("tagId").getAsString().equals("26702")) {
                                 RobotInformation.setMasterPosition(coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat());
                             }
                             if (myAgent.getAID().getName().contains("ServerAgent")) {
                                 RobotStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                             } else {
-                                if (data.get("tagId").getAsString().equals(RobotInformation.getUwbID())) {
+                                if (robot.get("tagId").getAsString().equals(RobotInformation.getUwbID())) {
                                     RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                                 }
                             }
                         }
                     }
-                    System.out.println("Test");
                 }
                 public void deliveryComplete(IMqttDeliveryToken token) {
                     System.out.println("Delivery complete");

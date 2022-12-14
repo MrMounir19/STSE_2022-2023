@@ -29,8 +29,8 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             x /= historyCopy.size();
             y /= historyCopy.size();
 
-            float target_x = RobotInformation.currentJob.getCurrentGoal().get(0);
-            float target_y = RobotInformation.currentJob.getCurrentGoal().get(1);
+            float target_x = RobotInformation.currentJob.getCurrentGoal().x;
+            float target_y = RobotInformation.currentJob.getCurrentGoal().y;
 
             float yaw = (float) Math.toDegrees(RobotInformation.orientation);
 
