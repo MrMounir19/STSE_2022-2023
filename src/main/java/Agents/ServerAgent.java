@@ -53,9 +53,14 @@ public class ServerAgent extends Agent {
                 data.addProperty("action", "pickup");
                 JsonArray path = new JsonArray();
                 JsonArray  goal = new JsonArray();
-                goal.add(7758);
-                goal.add(15886);
+                goal.add(7660);
+                goal.add(15800);
                 path.add(goal);
+                JsonArray goal2 = new JsonArray();
+                goal2.add(8400);
+                goal2.add(14345);
+                path.add(goal2);
+                //8400 14345
                 data.add("path", path);
                 jsonObject.add("data", data);
 

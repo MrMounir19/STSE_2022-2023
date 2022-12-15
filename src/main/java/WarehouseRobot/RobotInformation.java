@@ -18,7 +18,6 @@ public class RobotInformation {
     public static boolean isInitialized = false;
 
     public static ArrayList<Position> positionHistory = new ArrayList<Position>();
-    public static double orientation;
     public static ArrayList<Job> jobs = new ArrayList<Job>();
 
     public static Job currentJob = null;
@@ -53,5 +52,9 @@ public class RobotInformation {
         if (currentJob.getCurrentGoal() == null) {
             currentJob.setCurrentGoal(currentJob.path.remove(0));
         }
+    }
+
+    public static Float getYaw() {
+        return yaw;
     }
 }

@@ -1,5 +1,6 @@
 package Containers;
 
+import WarehouseRobot.RobComponents;
 import jade.core.Profile;
 import jade.util.ExtendedProperties;
 
@@ -38,7 +39,7 @@ public class RobotContainer extends BaseContainer {
 
     @Override
     protected void createAgents() {
-//        RobComponents.init();
+        RobComponents.init();
         super.createAgents();
     }
 

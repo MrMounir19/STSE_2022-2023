@@ -2,6 +2,7 @@ package Behaviours;
 
 import WarehouseRobot.RobotInformation;
 import WarehouseServer.RobotStorage;
+import WarehouseShared.Position;
 import jade.core.behaviours.CyclicBehaviour;
 import org.eclipse.paho.client.mqttv3.*;
 
@@ -46,6 +47,15 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                             JsonObject data = robot.getAsJsonObject("data");
                             JsonObject coordinates = data.getAsJsonObject("coordinates");
                             JsonObject orientation = data.getAsJsonObject("orientation");
+//                            if (robot.get("tagId").getAsString().equals("26689")) {
+//                                System.out.println(orientation.get("yaw").getAsString());
+//                                RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
+//                                System.out.println(RobotInformation.getYaw());
+//                                Position pos = RobotInformation.position;
+//                                float yaw = (float) Math.toDegrees(RobotInformation.yaw);
+//                                System.out.println("yaw");
+//                                System.out.println(yaw);
+//                            }
                             //Master tag
                             if (robot.get("tagId").getAsString().equals("26702")) {
                                 RobotInformation.setMasterPosition(coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat());
