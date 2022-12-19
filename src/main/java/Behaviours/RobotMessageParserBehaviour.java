@@ -72,8 +72,8 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
         JsonObject payload = Messages.toJson(message.getContent());
         JsonObject data = payload.getAsJsonObject("data");
 
-        Gson gson = new Gson();
-        Job job =  gson.fromJson(data, Job.class);
+        Job job = new Job();
+        job.fromString(data.toString());
 
         RobotInformation.addJob(job);
     }
