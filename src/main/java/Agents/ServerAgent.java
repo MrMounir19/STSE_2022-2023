@@ -25,38 +25,12 @@ import lejos.utility.Delay;
  * @since 26/11/2022
  */
 public class ServerAgent extends Agent {
-    private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
+    private final ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
     @Override
     protected void setup() {
         Behaviour serverMessageParserBehaviour = new ServerMessageParserBehaviour();
         Behaviour uwbReceivingBehaviour = new UWBReceivingBehaviour();
         addBehaviour(tbf.wrap(serverMessageParserBehaviour));
         addBehaviour(tbf.wrap(uwbReceivingBehaviour));
-        addBehaviour(tbf.wrap(new OneShotBehaviour() {
-            @Override
-            public void action() {
-                Delay.msDelay(10000);
-                ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-                message.addReceiver(new AID("RobotAgent", AID.ISLOCALNAME));
-                Gson gson = new Gson();
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.add("messageType", new JsonPrimitive("JobAction"));
-                JsonObject data = new JsonObject();
-                data.add("action", new JsonPrimitive("pickup"));
-                JsonArray path = new JsonArray();
-                JsonArray  goal = new JsonArray();
-                goal.add(5);
-                goal.add(6);
-                path.add(goal);
-                data.add("path", path);
-                jsonObject.add("data", data);
-                String output = data.toString();
-                message.setContent(output);
-                myAgent.send(message);
-                Job job =  gson.fromJson(data, Job.class);
-                System.out.println();
-            }
-        }));
-
     }
 }
