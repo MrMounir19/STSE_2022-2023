@@ -1,5 +1,12 @@
 {
   "agents": ["RobotAgent"],
   "use_timestamp": true,
-  "uwb_id": 1234
+  "uwb_id": 1234,
+  "local_host": "127.0.0.1",
+  "local_port": "1099",
+  "main_host": "127.0.0.1",
+  "main_port": "1099",
+  "gui": false,
+  "is_main": false,
+  "init_components": true
 }
