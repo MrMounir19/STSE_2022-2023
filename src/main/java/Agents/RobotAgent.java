@@ -19,7 +19,7 @@ import jade.core.behaviours.ThreadedBehaviourFactory;
  * @since 26/11/2022
  */
 public class RobotAgent extends Agent {
-    private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
+    private final ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
     @Override
     protected void setup() {
         Behaviour registrationBehaviour = new RegistrationBehaviour();

@@ -18,20 +18,20 @@ public class JobStorage {
     public static ArrayList<Job> finishedJobs = new ArrayList<>();
 
     public static void addToDoJob(Job job) {
-        System.out.println("Adding Job to Queue" + job.toString());
+        System.out.println("Adding Job to Queue: " + job.toString());
         toDoJobs.add(job);
-        System.out.println("Added a Job to the Queue: " + toDoJobs.get(toDoJobs.size() - 1));
+        System.out.println("Added a Job to the Queue: " + toDoJobs.get(toDoJobs.size() - 1).toString());
     }
 
     public static void addInProgressJob(Job job) {
         if(!toDoJobs.contains(job)){
-            System.out.println("Job does not exist in to-do Jobs");
+            System.out.println("Job does not exist in to-do Jobs: " + job.toString());
             return;
         }
 
-        System.out.println("Removing Job from to-do Jobs");
+        System.out.println("Removing Job from to-do Jobs: " + job.toString());
         toDoJobs.remove(job);
-        System.out.println("Job removed from to-do Jobs");
+        System.out.println("Job removed from to-do Jobs: " + job.toString());
 
         System.out.println("Adding Job to in-progress Jobs: " + job.toString());
         inProgressJobs.add(job);
@@ -43,19 +43,19 @@ public class JobStorage {
 
     public static void addFinishedJob(RobotObject robot, Job job) {
         if(!inProgressJobs.contains(job)){
-            System.out.println("Job does not exist in in-progress Jobs");
+            System.out.println("Job does not exist in in-progress Jobs: " + job.toString());
             return;
         }
 
         System.out.println("Robot: " + robot.toString() + " finished job: " + job.toString());
 
-        System.out.println("Removing Job from in-progress Jobs");
+        System.out.println("Removing Job from in-progress Jobs: " + job.toString());
         inProgressJobs.remove(job);
-        System.out.println("Job removed from in-progress Jobs");
+        System.out.println("Job removed from in-progress Jobs: " + job.toString());
 
-        System.out.println("Adding Job to finished Jobs: " + job);
+        System.out.println("Adding Job to finished Jobs: " + job.toString());
         finishedJobs.add(job);
-        System.out.println("Added a Job to the finished Jobs: " + finishedJobs.get(finishedJobs.size() - 1));
+        System.out.println("Added a Job to the finished Jobs: " + finishedJobs.get(finishedJobs.size() - 1).toString());
 
         job.setFinishedTime();
 
@@ -64,19 +64,19 @@ public class JobStorage {
 
     public static void failJob(RobotObject robot, Job job) {
         if(!inProgressJobs.contains(job)){
-            System.out.println("Job does not exist in in-progress Jobs");
+            System.out.println("Job does not exist in in-progress Jobs: " + job.toString());
             return;
         }
 
         System.out.println("Robot: " + robot.toString() + "failed job: " + job.toString());
 
-        System.out.println("Removing Job from in-progress Jobs");
+        System.out.println("Removing Job from in-progress Jobs: " + job.toString());
         inProgressJobs.remove(job);
-        System.out.println("Job removed from in-progress Jobs");
+        System.out.println("Job removed from in-progress Jobs: " + job.toString());
 
-        System.out.println("Adding Job back to to-do jobs: " + job);
+        System.out.println("Adding Job back to to-do Jobs: " + job.toString());
         toDoJobs.add(job);
-        System.out.println("Added a Job to the to-do list: " + toDoJobs.get(toDoJobs.size() - 1));
+        System.out.println("Added a Job to the to-do Jobs: " + toDoJobs.get(toDoJobs.size() - 1).toString());
     }
 
     public static ArrayList<Job> allJobs() {
