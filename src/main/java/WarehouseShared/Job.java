@@ -2,6 +2,7 @@ package WarehouseShared;
 
 import Enums.JobType;
 import Utils.Messages;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -77,7 +78,7 @@ public class Job {
 
     @Override
     public String toString() {
-        return getAction();
+        return getAction() + "(" + getId() + ")";
     }
 
     public void fromString(String jsonString){
@@ -85,14 +86,14 @@ public class Job {
         this.setId(jsonData.get("id").getAsInt());
         this.setAction(jsonData.get("action").getAsString());
         JsonObject sourcePosition = jsonData.get("sourcePosition").getAsJsonObject();
+
         JsonArray path = jsonData.get("path").getAsJsonArray();
         ArrayList<Position> pathArray = new ArrayList<>();
 
         for(int pathIndex = 0; pathIndex < path.size(); pathIndex++){
-            JsonObject jsonPathPos = path.get(pathIndex).getAsJsonObject();
-            Position pathPos = new Position(jsonPathPos.get("x").getAsFloat(), jsonPathPos.get("y").getAsFloat());
-            pathArray.add(pathPos);
+            pathArray.add(new Gson().fromJson(path.get(pathIndex), Position.class));
         }
+
         this.setPath(pathArray);
         Position sP = new Position(sourcePosition.get("x").getAsFloat(), sourcePosition.get("y").getAsFloat());
         this.setSourcePosition(sP);
@@ -117,7 +118,7 @@ public class Job {
                 "'id':" + id + "," +
                 "'action':" + action + "," +
                 "'path':" + path_string + "," +
-                "'sourcePosition:':" +
+                "'sourcePosition':" +
                     "{" +
                         "'x':" + sourcePosition.x + "," +
                         "'y':" + sourcePosition.y +
