@@ -1,9 +1,9 @@
 package Behaviours;
 
 import Utils.Messages;
+import WarehouseServer.JobStorage;
 import WarehouseServer.RobotObject;
 import WarehouseServer.RobotStorage;
-import WarehouseServer.Scheduler;
 import WarehouseShared.Job;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -15,23 +15,21 @@ import jade.lang.acl.ACLMessage;
  * @author Thimoty
  * @since 10/12/2022
  */
-public class JobAssignBehaviour extends OneShotBehaviour {
+public class JobFailedBehaviour extends OneShotBehaviour {
     ACLMessage message;
 
-    JobAssignBehaviour(ACLMessage message) {
+    JobFailedBehaviour (ACLMessage message) {
         this.message = message;
     }
 
     @Override
     public void action() {
         RobotObject robot = RobotStorage.getFromACLMessage(message);
-        Job job = Scheduler.requestJob(robot);
+        String content = message.getContent();
 
-        if (job == null) {
-            System.out.println("Job is null");
-            return;
-        }
+        int jobId = Messages.toJson(content).get("data").getAsInt();
+        Job job = JobStorage.getFromId(jobId);
 
-        myAgent.send(Messages.assignJobMessage(robot.getRobotId(), job));
+        JobStorage.failJob(robot, job);
     }
 }

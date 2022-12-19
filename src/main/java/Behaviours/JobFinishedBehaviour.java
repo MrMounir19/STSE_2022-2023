@@ -1,5 +1,10 @@
 package Behaviours;
 
+import Utils.Messages;
+import WarehouseServer.JobStorage;
+import WarehouseServer.RobotObject;
+import WarehouseServer.RobotStorage;
+import WarehouseShared.Job;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -19,6 +24,10 @@ public class JobFinishedBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
-
+        RobotObject robot = RobotStorage.getFromACLMessage(message);
+        String content = message.getContent();
+        int jobId = Messages.toJson(content).get("data").getAsInt();
+        Job job = JobStorage.getFromId(jobId);
+        JobStorage.addFinishedJob(robot, job);
     }
 }

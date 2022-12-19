@@ -1,6 +1,7 @@
 package Behaviours;
 
 import Utils.Messages;
+import WarehouseRobot.RobotInformation;
 import WarehouseServer.RobotObject;
 import WarehouseServer.RobotStorage;
 import WarehouseServer.Scheduler;
@@ -13,25 +14,18 @@ import jade.lang.acl.ACLMessage;
  *
  * @author Maxim
  * @author Thimoty
- * @since 10/12/2022
+ * @since 19/12/2022
  */
-public class JobAssignBehaviour extends OneShotBehaviour {
-    ACLMessage message;
-
-    JobAssignBehaviour(ACLMessage message) {
-        this.message = message;
-    }
-
+public class FinishJobBehaviour extends OneShotBehaviour {
     @Override
     public void action() {
-        RobotObject robot = RobotStorage.getFromACLMessage(message);
-        Job job = Scheduler.requestJob(robot);
+        Job job = RobotInformation.currentJob;
 
         if (job == null) {
             System.out.println("Job is null");
             return;
         }
 
-        myAgent.send(Messages.assignJobMessage(robot.getRobotId(), job));
+        myAgent.send(Messages.finishedJobMessage(job));
     }
 }
