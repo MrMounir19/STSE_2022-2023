@@ -45,6 +45,8 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
             handleJobFinishedMessage(message);
         } else if (messageType == MessageType.JobFailed) {
             handleJobFailedMessage(message);
+        } else if (messageType == MessageType.JobRequest) {
+            handleJobRequestMessage(message);
         } else {
             System.out.println("Received message type not valid for server.");
         }
@@ -61,5 +63,8 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
     }
     private void handleJobFailedMessage(ACLMessage message) {
         myAgent.addBehaviour(new JobFailedBehaviour(message));
+    }
+    private void handleJobRequestMessage(ACLMessage message) {
+        myAgent.addBehaviour(new JobAssignBehaviour(message));
     }
 }
