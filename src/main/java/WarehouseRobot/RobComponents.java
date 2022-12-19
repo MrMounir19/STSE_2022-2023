@@ -29,7 +29,7 @@ public class RobComponents {
         motorL = new EV3LargeRegulatedMotor(MotorPort.B);
         motorR = new EV3LargeRegulatedMotor(MotorPort.C);
         ussF = new EV3UltrasonicSensor(SensorPort.S1);
-        ussL = new EV3UltrasonicSensor(SensorPort.S2);
+        ussL = new EV3UltrasonicSensor(SensorPort.S4);
         System.out.println("Good init");
     }
 }

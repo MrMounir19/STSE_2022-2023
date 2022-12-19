@@ -15,7 +15,7 @@ import lejos.utility.Delay;
 public class MotorControl {
     static final public int slowSpeed = 50;
     static final public int mediumSpeed = 100;
-    static final public int fastSpeed = 400;
+    static final public int fastSpeed = 200;
     static int speed = 100;
     static int leftWheelModifier = 1;
     static int rightWheelModifier = 1;
@@ -98,8 +98,13 @@ public class MotorControl {
     }
 
     public static void moveForwardPrecise(int speed, float leftSpeedMultiplier, float rightSpeedMultiplier) {
+        System.out.println("Left speed: " + (invertControls * speed * leftSpeedMultiplier));
+        System.out.println("Rightspeed speed: " + (invertControls * speed * rightSpeedMultiplier));
+
         RobComponents.motorL.setSpeed((int) (invertControls * speed * leftSpeedMultiplier));
         RobComponents.motorR.setSpeed((int) (invertControls * speed * rightSpeedMultiplier));
+        RobComponents.motorL.forward();
+        RobComponents.motorR.forward();
         Delay.msDelay(controlDelayMs);
     }
 }

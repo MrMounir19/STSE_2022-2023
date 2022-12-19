@@ -14,6 +14,7 @@ public class Job {
     public LocalTime startTime;
     public LocalTime finishedTime;
     public Position currentGoal = null;
+    public Position previousGoal = null;
 
     public void setId(int id) {
         this.id = id;
@@ -98,7 +99,7 @@ public class Job {
         Call this function when you have reached the current goal, this will make the next call of getCurrentGoal()
         return the next position of the path
          */
-        path.remove(0);
+        previousGoal = path.remove(0);
         setCurrentGoal(null);
     }
 

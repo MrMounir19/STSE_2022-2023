@@ -3,6 +3,7 @@ package WarehouseRobot;
 import WarehouseShared.Job;
 import WarehouseShared.Position;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
@@ -49,8 +50,13 @@ public class RobotInformation {
 
     public static void takeJobFromQueue() {
         currentJob = jobs.remove(0);
-        if (currentJob.getCurrentGoal() == null) {
+        System.out.println("AAAAAAAAAAAAAAAAAAa");
+        if (currentJob.currentGoal == null) {
+            System.out.println("need help?");
             currentJob.setCurrentGoal(currentJob.path.remove(0));
+            System.out.println("set previousgoal");
+            System.out.println(RobotInformation.position.x + " " + RobotInformation.position.y);
+            currentJob.previousGoal = RobotInformation.position;
         }
     }
 
