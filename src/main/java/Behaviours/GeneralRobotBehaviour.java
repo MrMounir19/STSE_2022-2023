@@ -72,7 +72,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 }
 
                 //TODO smoothen this since the location can jitter
-                if (Math.abs(RobotInformation.xPosition - target_x) < 100 &&  Math.abs(RobotInformation.yPosition - target_y) <100) {
+                if (Math.abs(RobotInformation.position.x - target_x) < 100 &&  Math.abs(RobotInformation.position.y - target_y) <100) {
                     break;
                 }
             }
@@ -82,11 +82,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 Delay.msDelay(100);
                 MotorControl.turnLeftInPlace();
             }
-
         }
-
-
-
     }
 
 

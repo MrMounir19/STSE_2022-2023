@@ -11,18 +11,16 @@ import java.util.ArrayList;
 // Could use a RobotObject instead of most of this, and keep jobs? (Or reuse WarehouseServer.JobStorage)
 public class RobotInformation {
     public static String robotId;
-    public static float xPosition;
-    public static float yPosition;
 
     public static float masterXPosition;
     public static float masterYPosition;
     public static String uwbID;
-    public static Position position;
-    public static float yaw;
+    public static Position position = new Position(0, 0);
+    public static float yaw = 0;
 
     public static ArrayList<ArrayList<Float>> positionHistory;
-    public static double orientation;
-    public static ArrayList<Job> jobs;
+    public static double orientation = 0;
+    public static ArrayList<Job> jobs = new ArrayList<>();
 
     public static Job currentJob = null;
 
