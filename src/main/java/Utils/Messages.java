@@ -88,7 +88,7 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': '" + MessageType.Job + "', 'data': " + job.getJsonString() + "}";
+        String payload = "{'messageType': '" + MessageType.Job + "', 'data': " + job.toJsonString() + "}";
 
         message.setContent(payload);
 
@@ -99,7 +99,18 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': '" + MessageType.Job + "', 'data': " + job.getAction() + "}";
+        String payload = "{'messageType': '" + MessageType.JobFinished + "', 'data': " + job.getId() + "}";
+
+        message.setContent(payload);
+
+        return message;
+    }
+
+    public static ACLMessage failedJobMessage(Job job) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
+
+        String payload = "{'messageType': '" + MessageType.JobFailed + "', 'data': " + job.getId() + "}";
 
         message.setContent(payload);
 
