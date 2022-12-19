@@ -115,6 +115,8 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                     MotorControl.setSpeed(MotorControl.fastSpeed);
                 }
             }
+            // TODO: Send finish (or failure) job message and remove current job.
+            // See Maxim & Thimoty branch for these messages.
         }
     }
 

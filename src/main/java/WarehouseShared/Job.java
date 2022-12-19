@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Job {
     protected int id;
     protected JobType action;
-    public ArrayList<Position> path = new ArrayList<Position>();
+    public ArrayList<Position> path = new ArrayList<>();
     protected Position sourcePosition;
     public LocalTime startTime;
     public LocalTime finishedTime;
@@ -86,12 +86,15 @@ public class Job {
         return currentGoal;
     }
 
-    public void advanceGoal(){
+    public void advanceGoal() {
         /*
-        Call this function when you have reached the current goal, this will make the next call of getCurrentGoal()
-        return the next position of the path
+         * Call this function when you have reached the current goal, this will give the next goal as current
          */
         previousGoal = path.remove(0);
+        if (path.size() > 0) {
+            setCurrentGoal(path.get(0));
+            return;
+        }
         setCurrentGoal(null);
     }
 
