@@ -1,5 +1,6 @@
 package Behaviours;
 
+import Utils.Messages;
 import WarehouseRobot.RobotInformation;
 import WarehouseRobot.SensorControl;
 import WarehouseShared.Position;
@@ -20,15 +21,21 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
     @Override
     public void action() {
         block(100);
-        // If the robot does not have a job, take one from the queue
-        if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
-            System.out.println("Taking first job");
-            RobotInformation.takeJobFromQueue();
-        }
         // Position p = RobotInformation.position;
         // initialize the robot, especially important for its correct orientation
         if (!RobotInformation.isInitialized) {
             initializeRobot();
+        }
+        if (RobotInformation.jobs.size() == 0) {
+            myAgent.send(Messages.requestJobMessage());
+            // TODO: Block for X ms to receive & store job(s)?
+            // Potentially request multiple?
+        }
+        // If the robot does not have a job, take one from the queue
+        if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
+            System.out.println("Taking first job");
+            RobotInformation.takeJobFromQueue();
+            RobotInformation.currentJob.advanceGoal();  // to get the first goal from the new job
         }
         // When the robot has a job
         if (RobotInformation.currentJob != null) {
@@ -107,17 +114,8 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 } else {
                     MotorControl.setSpeed(MotorControl.fastSpeed);
                 }
-
-            /*
-            * TODO this should handle the next job or next location + messaging
-            * while(true) {
-            *     Delay.msDelay(100);
-            *     MotorControl.turnLeftInPlace();
-            * }
-            */
             }
         }
-
     }
 
     /**

@@ -83,14 +83,6 @@ public class Job {
     }
 
     public Position getCurrentGoal() {
-        if (currentGoal == null) {
-            if (path.size() > 0){
-                currentGoal = path.get(0);
-            }
-            else {
-                return null;
-            }
-        }
         return currentGoal;
     }
 
