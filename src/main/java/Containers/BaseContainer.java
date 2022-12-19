@@ -77,9 +77,14 @@ public class BaseContainer {
 
     protected void createProperties() {
         properties = new ExtendedProperties();
-        properties.setProperty(Profile.GUI, "true");
-        properties.setProperty(Profile.LOCAL_HOST, "127.0.0.1");
-        properties.setProperty(Profile.LOCAL_PORT, "1099");
+        properties.setProperty(Profile.GUI, config.get("gui").getAsString());
+        if (!config.get("is_main").getAsBoolean()) {
+            properties.setProperty(Profile.MAIN_HOST, config.get("main_host").getAsString());
+            properties.setProperty(Profile.MAIN_PORT, config.get("main_port").getAsString());
+        }
+
+        properties.setProperty(Profile.LOCAL_HOST, config.get("local_host").getAsString());
+        properties.setProperty(Profile.LOCAL_PORT, config.get("local_port").getAsString());
     }
 
     protected void createProfile() {

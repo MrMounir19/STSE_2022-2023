@@ -1,5 +1,6 @@
 package Containers;
 
+import WarehouseRobot.RobComponents;
 import jade.core.Profile;
 import jade.util.ExtendedProperties;
 
@@ -23,17 +24,6 @@ public class RobotContainer extends BaseContainer {
         RobotContainer robotContainer = new RobotContainer();
         robotContainer.setConfigFromPath("./configs/robotcontainer.json");
         robotContainer.start();
-    }
-
-    @Override
-    protected void createProperties() {
-        properties = new ExtendedProperties();
-        properties.setProperty(Profile.GUI, "false");
-        properties.setProperty(Profile.MAIN_HOST, "127.0.0.1");
-        properties.setProperty(Profile.MAIN_PORT, "1099");
-        properties.setProperty(Profile.LOCAL_HOST, "127.0.0.1");
-        properties.setProperty(Profile.LOCAL_PORT, "1099");
-//        properties.setProperty(Profile.PLATFORM_ID, null);
     }
 
     @Override
