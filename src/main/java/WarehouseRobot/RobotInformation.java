@@ -18,8 +18,8 @@ public class RobotInformation {
     public static float yaw;
     public static boolean isInitialized = false;
 
-    public static ArrayList<Position> positionHistory = new ArrayList<Position>();
-    public static ArrayList<Job> jobs = new ArrayList<Job>();
+    public static ArrayList<Position> positionHistory = new ArrayList<>();
+    public static ArrayList<Job> jobs = new ArrayList<>();
 
     public static Job currentJob = null;
 
@@ -40,6 +40,7 @@ public class RobotInformation {
     public static void setMasterPosition(float x, float y) {
         masterPosition = new Position(x, y);
     }
+
     public static void clearHistory() {
         positionHistory.clear();
     }
@@ -50,11 +51,8 @@ public class RobotInformation {
 
     public static void takeJobFromQueue() {
         currentJob = jobs.remove(0);
-        System.out.println("AAAAAAAAAAAAAAAAAAa");
         if (currentJob.currentGoal == null) {
-            System.out.println("need help?");
             currentJob.setCurrentGoal(currentJob.path.remove(0));
-            System.out.println("set previousgoal");
             System.out.println(RobotInformation.position.x + " " + RobotInformation.position.y);
             currentJob.previousGoal = RobotInformation.position;
         }
