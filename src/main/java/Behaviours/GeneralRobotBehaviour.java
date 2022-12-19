@@ -47,15 +47,17 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             System.out.println("yaw");
             System.out.println(yaw);
             System.out.println();
-            float target_angle = (float) Math.abs(Math.toDegrees(Math.atan2(p.y - targetpos.y, targetpos.x - p.x)));
+            float target_angle = (float)Math.toDegrees(Math.atan2(targetpos.y - p.y, targetpos.x - p.x));
             System.out.println("target");
             System.out.println(target_angle);
 
-            float diff_angle = Math.abs(target_angle - yaw);
+            float diff_angle = target_angle - yaw;
 
-            diff_angle = diff_angle % 360;
-            while (diff_angle < 0) { //pretty sure this comparison is valid for doubles and floats
-                diff_angle += 360.0;
+
+            if (diff_angle < -180) {
+                diff_angle += 360;
+            } else if (diff_angle >= 180) {
+                diff_angle -=360;
             }
             System.out.println("diff angle");
             System.out.println(diff_angle);
@@ -69,7 +71,12 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 MotorControl.turnLeftInPlace();
 
                 yaw = (float) Math.toDegrees(RobotInformation.yaw);
-                diff_angle = Math.abs(target_angle - yaw);
+                diff_angle = target_angle - yaw;
+                if (diff_angle < -180) {
+                    diff_angle += 360;
+                } else if (diff_angle >= 180) {
+                    diff_angle -=360;
+                }
                 System.out.println(diff_angle);
             } while (!(diff_angle < 1));
             System.out.println("finished rotate loop");
@@ -78,22 +85,28 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             while (!RobotInformation.currentJob.GoalFinished()) {
                 Delay.msDelay(100);
                 MotorControl.setSpeed(MotorControl.mediumSpeed);
-                MotorControl.moveForward();
 
                 yaw = (float) Math.toDegrees(RobotInformation.yaw);
                 diff_angle = target_angle - yaw;
+                if (diff_angle < -180) {
+                    diff_angle += 360;
+                } else if (diff_angle >= 180) {
+                    diff_angle -=360;
+                }
                 //Forward with slight rotation if we deviate
-//                if (diff_angle > 10 && diff_angle <= 180) {
-//                    MotorControl.moveForwardPrecise(MotorControl.mediumSpeed, 1 + diff_angle / 170, 1);
-//                } else if (diff_angle < 350 && diff_angle > 180) {
-//                    MotorControl.moveForwardPrecise(MotorControl.mediumSpeed, 1, 1 + diff_angle / 170);
-//                }
+                if (diff_angle > 10 && diff_angle <= 180) {
+                    MotorControl.moveForwardPrecise(MotorControl.mediumSpeed, 1 + diff_angle / 170, 1);
+                } else if (diff_angle < -10 && diff_angle >= -180) {
+                    MotorControl.moveForwardPrecise(MotorControl.mediumSpeed, 1, 1 + diff_angle / 170);
+                } else {
+                    MotorControl.moveForward();
+                }
                 //TODO smoothen this since the location can jitter
                 System.out.println("X dist:" + Math.abs(RobotInformation.position.x - targetpos.x) + "  y dist:" + Math.abs(RobotInformation.position.y - targetpos.y));
                 System.out.println("x pos: " + RobotInformation.position.x + "  ypos:" + RobotInformation.position.y);
                 System.out.println("target x pos: " + targetpos.x + "  targetypos:" + targetpos.y);
 
-                if (Math.abs(RobotInformation.position.x - targetpos.x) < 200 && Math.abs(RobotInformation.position.y - targetpos.y) < 200) {
+                if (Math.abs(RobotInformation.position.x - targetpos.x) < 50 && Math.abs(RobotInformation.position.y - targetpos.y) < 50) {
                     System.out.println("X dist:" + Math.abs(RobotInformation.position.x - targetpos.x) + "  y dist:" + Math.abs(RobotInformation.position.x - targetpos.y));
                     // Tell system to move on to the next goal
                     System.out.println("reach goal");
