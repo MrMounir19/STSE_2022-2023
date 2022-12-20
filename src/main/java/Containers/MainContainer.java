@@ -1,4 +1,7 @@
 package Containers;
+import jade.core.Profile;
+import jade.util.ExtendedProperties;
+
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -21,5 +24,13 @@ public class MainContainer extends BaseContainer {
         MainContainer mainContainer = new MainContainer();
         mainContainer.setConfigFromPath("./configs/maincontainer.json");
         mainContainer.start();
+    }
+
+    @Override
+    protected void createProperties() {
+        properties = new ExtendedProperties();
+        properties.setProperty(Profile.GUI, "true");
+        properties.setProperty(Profile.LOCAL_HOST, "192.168.0.181");
+        properties.setProperty(Profile.LOCAL_PORT, "1099");
     }
 }

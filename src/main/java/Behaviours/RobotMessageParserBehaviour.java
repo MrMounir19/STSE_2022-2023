@@ -4,7 +4,10 @@ import Enums.MessageType;
 import WarehouseShared.Job;
 import Utils.Messages;
 import WarehouseRobot.RobotInformation;
+import WarehouseShared.Position;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -38,7 +41,7 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
                 return;
             }
         }
-
+        System.out.println("received message");
         String content = message.getContent();
         JsonObject payload;
 
@@ -48,13 +51,16 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
             e.printStackTrace();
             return;
         }
-
+        System.out.println("Parsing message type");
+        System.out.println(payload);
         MessageType messageType = MessageType.valueOf(payload.get("messageType").getAsString());
+        System.out.println("Done parsing message type");
 
         if (messageType == MessageType.RegistrationConfirmation) {
             handleRegistrationConfirmationMessage(message);
 
-        } else if(messageType == MessageType.Job){
+        } else if (messageType == MessageType.Job) {
+            System.out.println("Start check");
             handleJobMessage(message);
         } else {
             System.out.println("Received message type not valid for robot.");

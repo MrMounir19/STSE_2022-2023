@@ -2,9 +2,12 @@ package Agents;
 
 import Behaviours.ServerMessageParserBehaviour;
 import Behaviours.UWBReceivingBehaviour;
+import WarehouseServer.RobotStorage;
 import WarehouseShared.Job;
+import WarehouseShared.Position;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import jade.core.AID;
@@ -14,6 +17,9 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.lang.acl.ACLMessage;
 import lejos.utility.Delay;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * This agent is used for the server.

@@ -63,7 +63,7 @@ The tasks associated to deploy on your Robot are:
 - deployAndProfilingRun  (Deploy & Execute your jar configured for Profiling activities)
 - pkillJava (Kill Java processes in your Brick)
 
-You can use the Java IDE to launch the task or execute them from the terminal
+You can use the Java IDE to launch the task or execute them from the terminal:
 
 ```
 ./gradlew deployAndBrickRun

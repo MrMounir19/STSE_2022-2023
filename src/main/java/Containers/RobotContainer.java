@@ -28,7 +28,7 @@ public class RobotContainer extends BaseContainer {
 
     @Override
     protected void createAgents() {
-//        RobComponents.init();
+        RobComponents.init();
         super.createAgents();
     }
 

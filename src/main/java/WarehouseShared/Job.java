@@ -14,11 +14,12 @@ import java.util.ArrayList;
 public class Job {
     protected int id;
     protected JobType action;
-    public ArrayList<Position> path;
+    public ArrayList<Position> path = new ArrayList<>();
     protected Position sourcePosition;
     public LocalTime startTime;
     public LocalTime finishedTime;
     public Position currentGoal = null;
+    public Position previousGoal = null;
 
     public void setId(int id) {
         this.id = id;
@@ -127,11 +128,24 @@ public class Job {
     }
 
     public Position getCurrentGoal() {
-        if (currentGoal == null) {
-            currentGoal = path.remove(0);
-        }
         return currentGoal;
+    }
 
+    public void advanceGoal() {
+        /*
+         * Call this function when you have reached the current goal, this will give the next goal as current
+         */
+        System.out.println("Current Goal finished: (" + path.get(0).x + ", " + path.get(0).y + ")");
+        previousGoal = path.remove(0);
+        if (path.size() > 0) {
+            setCurrentGoal(path.get(0));
+            return;
+        }
+        setCurrentGoal(null);
+    }
+
+    public Boolean GoalFinished(){
+        return ((path.size() == 0) && (currentGoal == null));
     }
 
     public void setCurrentGoal(Position currentGoal) {
