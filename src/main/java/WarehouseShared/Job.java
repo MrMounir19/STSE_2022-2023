@@ -90,6 +90,7 @@ public class Job {
         /*
          * Call this function when you have reached the current goal, this will give the next goal as current
          */
+        System.out.println("Current Goal finished: (" + path.get(0).x + ", " + path.get(0).y + ")");
         previousGoal = path.remove(0);
         if (path.size() > 0) {
             setCurrentGoal(path.get(0));

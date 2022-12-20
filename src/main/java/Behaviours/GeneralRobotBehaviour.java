@@ -35,7 +35,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
             System.out.println("Taking first job");
             RobotInformation.takeJobFromQueue();
-            RobotInformation.currentJob.advanceGoal();  // to get the first goal from the new job
+            //RobotInformation.currentJob.advanceGoal();  // to get the first goal from the new job
         }
         // When the robot has a job
         if (RobotInformation.currentJob != null) {
@@ -52,11 +52,18 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             diff_angle = correctAngle(target_angle - yaw);  // The diff_angle has to be in [-180, 180] degrees
 
             // initial rotation to the direction of our first target on the path
-            while (diff_angle >= 1) {
+            while (Math.abs(diff_angle) >= 1) {
                 //TODO set left or right if angles are closer
                 Delay.msDelay(100);
                 MotorControl.setSpeed(MotorControl.fastSpeed);
-                MotorControl.turnLeftInPlace();
+                // If negative angle -> turn left
+                // if positive angle -> turn right
+                if (diff_angle < 0) {
+                    MotorControl.turnLeftInPlace();
+                }
+                else {
+                    MotorControl.turnRightInPlace();
+                }
 
                 yaw = (float) Math.toDegrees(RobotInformation.yaw);
                 diff_angle = correctAngle(target_angle - yaw);
@@ -70,6 +77,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 // Collision check
                 int forward_distance = SensorControl.getFrontSensorDistance();
                 int forward_dist_threshold = 6;
+                System.out.println("forward_distance: " +  forward_distance);
                 if (forward_distance > 0 && forward_distance <= forward_dist_threshold) {
                     System.out.println("Collision detected at range: " + forward_distance);
                     handleCollision();
@@ -150,9 +158,10 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
      * @return the new angle, that is in the [-180, 180] degree range
      */
     private float correctAngle(float angle) {
-        if (angle < -180) {
+        while (angle < -180) {
             angle += 360;
-        } else if (angle >= 180) {
+        }
+        while (angle >= 180) {
             angle -=360;
         }
         return angle;
@@ -174,7 +183,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         // We set the robot's speed to 100, which should be fairly slow allowing for a controlled manoeuvre.
         MotorControl.setSpeed(MotorControl.mediumSpeed);
         // We start turning the robot to the right, allowing the left sensor to detect the object.
-        MotorControl.turnLeftInPlace();
+        MotorControl.turnRightInPlace();
         // While we haven't yet detected an object with the left sensor, we keep turning.
         System.out.println("Initiating turn check.");
         int SensorDistanceTolerance = 3;
@@ -204,36 +213,46 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         MotorControl.setSpeed(MotorControl.mediumSpeed);
         boolean didTurn = false;
         System.out.println("Start loop");
+        int attempts_count = 0; // countsturn how many times we have tried to avoid obstacle
         while (true) {
             Delay.msDelay(100);
-            int frontSens = SensorControl.getFrontSensorDistance();
-            System.out.println("get front sensor");
+            int frontSens = SensorControl.getFrontSensorDistance();SensorControl.getLeftSensorDistance();
+            int leftSens = Math.min(SensorControl.getLeftSensorDistance(), 100);
+            System.out.println("frontSens: " + frontSens + "--- leftSens: " + leftSens);
             if (frontSens > 0 && frontSens <= forward_distance - 5) {
                 handleCollision();
             }
-            if (SensorControl.getLeftSensorDistance() > (forward_distance + SensorDistanceTolerance) && !didTurn) {
+            if (leftSens > (forward_distance + SensorDistanceTolerance) && !didTurn) {
                 didTurn = true;
-                MotorControl.turnRightInPlace();
-            } else if (SensorControl.getLeftSensorDistance() < (forward_distance - SensorDistanceTolerance) && !didTurn) {
-                didTurn = true;
+                System.out.println("turnLeftCollision");
                 MotorControl.turnLeftInPlace();
+            } else if (leftSens < (forward_distance - SensorDistanceTolerance) && !didTurn) {
+                didTurn = true;
+                System.out.println("turnRightCollision");
+                MotorControl.turnRightInPlace();
             } else {
                 MotorControl.moveForward();
+                System.out.println("moveForwardCollision");
+                attempts_count += 1;
                 didTurn = false;
                 Delay.msDelay(200);
             }
 
-            // Check if back on path
-            int path_margin = 5;
-            // Calculate distance of current position to line
-            Position p1 = RobotInformation.currentJob.previousGoal;
-            Position p2 = RobotInformation.currentJob.currentGoal;
-            Position p0 = RobotInformation.position;
+            // If we have tried to avoid enough times
+/*            if(attempts_count > 25){
+                // Check if back on path
+                int path_margin = 5;
+                // Calculate distance of current position to line
+                Position p1 = RobotInformation.currentJob.previousGoal;
+                Position p2 = RobotInformation.currentJob.currentGoal;
+                Position p0 = RobotInformation.position;
 
-            double linedistance = Math.abs((p2.x-p1.x)*(p1.y-p0.y)-(p1.x-p0.x)*(p2.y-p1.y))/Math.sqrt(((p2.x-p1.x)*(p2.x-p1.x))+((p2.y-p1.y)*(p2.y-p1.y)));
-            if (linedistance < path_margin) {
-                break;
-            }
+                double linedistance = Math.abs((p2.x-p1.x)*(p1.y-p0.y)-(p1.x-p0.x)*(p2.y-p1.y))/Math.sqrt(((p2.x-p1.x)*(p2.x-p1.x))+((p2.y-p1.y)*(p2.y-p1.y)));
+                if (linedistance < path_margin) {
+                    break;
+                }
+            }*/
+
         }
     }
 }
