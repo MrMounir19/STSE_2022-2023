@@ -1,9 +1,5 @@
 package Containers;
 
-import WarehouseRobot.RobComponents;
-import jade.core.Profile;
-import jade.util.ExtendedProperties;
-
 /**
  * This is a simple container class. It creates a container for a single agent, to be deployed on a single machine.
  * The final version of the project will have multiple agents per machine, and multiple machines.
