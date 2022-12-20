@@ -2,7 +2,6 @@ package Behaviours;
 
 import WarehouseRobot.RobotInformation;
 import WarehouseServer.RobotStorage;
-import WarehouseShared.Position;
 import jade.core.behaviours.CyclicBehaviour;
 import org.eclipse.paho.client.mqttv3.*;
 
