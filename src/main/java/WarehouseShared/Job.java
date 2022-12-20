@@ -5,17 +5,16 @@ import Utils.Messages;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+
 public class Job {
     protected int id;
     protected JobType action;
     public ArrayList<Position> path = new ArrayList<>();
-    protected Position sourcePosition;
     public LocalTime startTime;
     public LocalTime finishedTime;
     public Position currentGoal = null;
@@ -62,11 +61,7 @@ public class Job {
     }
 
     public Position getSourcePosition() {
-        return this.sourcePosition;
-    }
-
-    public void setSourcePosition(Position position) {
-        this.sourcePosition = position;
+        return this.path.get(0);
     }
 
     public ArrayList<Position> getPath() {
@@ -86,7 +81,6 @@ public class Job {
         JsonObject jsonData = Messages.toJson(jsonString);
         this.setId(jsonData.get("id").getAsInt());
         this.setAction(jsonData.get("action").getAsString());
-        JsonObject sourcePosition = jsonData.get("sourcePosition").getAsJsonObject();
 
         JsonArray path = jsonData.get("path").getAsJsonArray();
         ArrayList<Position> pathArray = new ArrayList<>();
@@ -96,9 +90,6 @@ public class Job {
         }
 
         this.setPath(pathArray);
-        Position sP = new Position(sourcePosition.get("x").getAsFloat(), sourcePosition.get("y").getAsFloat());
-        this.setSourcePosition(sP);
-
     }
 
     public String toJsonString() {
@@ -118,12 +109,7 @@ public class Job {
         return "{" +
                 "'id':" + id + "," +
                 "'action':" + action + "," +
-                "'path':" + path_string + "," +
-                "'sourcePosition':" +
-                    "{" +
-                        "'x':" + sourcePosition.x + "," +
-                        "'y':" + sourcePosition.y +
-                    "}"  +
+                "'path':" + path_string +
                 "}";
     }
 
