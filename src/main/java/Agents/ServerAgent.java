@@ -2,9 +2,12 @@ package Agents;
 
 import Behaviours.ServerMessageParserBehaviour;
 import Behaviours.UWBReceivingBehaviour;
+import WarehouseServer.RobotStorage;
 import WarehouseShared.Job;
+import WarehouseShared.Position;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import jade.core.AID;
@@ -14,6 +17,9 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.lang.acl.ACLMessage;
 import lejos.utility.Delay;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * This agent is used for the server.
@@ -35,26 +41,51 @@ public class ServerAgent extends Agent {
         addBehaviour(tbf.wrap(new OneShotBehaviour() {
             @Override
             public void action() {
-                Delay.msDelay(10000);
+                Delay.msDelay(25000);
+                System.out.println("REEEE");
+                String id = RobotStorage.robots.get(0).robotId;
                 ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-                message.addReceiver(new AID("RobotAgent", AID.ISLOCALNAME));
+                message.addReceiver(new AID(id, AID.ISLOCALNAME));
                 Gson gson = new Gson();
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.add("messageType", new JsonPrimitive("JobAction"));
+                jsonObject.addProperty("messageType", "Job");
                 JsonObject data = new JsonObject();
-                data.add("action", new JsonPrimitive("pickup"));
+                data.addProperty("action", "pickup");
                 JsonArray path = new JsonArray();
+//                JsonArray  goal = new JsonArray();
+//                goal.add(7660);
+//                goal.add(15800);
+//                path.add(goal);
+//                JsonArray goal2 = new JsonArray();
+//                goal2.add(8400);
+//                goal2.add(14345);
+//                path.add(goal2);
+
                 JsonArray  goal = new JsonArray();
-                goal.add(5);
-                goal.add(6);
+                goal.add(7170);
+                goal.add(16270);
                 path.add(goal);
+                JsonArray goal2 = new JsonArray();
+                goal2.add(7130);
+                goal2.add(15230);
+                path.add(goal2);
+                JsonArray goal3 = new JsonArray();
+                goal3.add(8700);
+                goal3.add(14100);
+                path.add(goal3);
+                JsonArray goal4 = new JsonArray();
+                goal4.add(8540);
+                goal4.add(15900);
+                path.add(goal4);
+
+                //8400 14345
                 data.add("path", path);
                 jsonObject.add("data", data);
-                String output = data.toString();
+
+                String output = jsonObject.toString();
                 message.setContent(output);
                 myAgent.send(message);
-                Job job =  gson.fromJson(data, Job.class);
-                System.out.println();
+                System.out.println("Sent message");
             }
         }));
 

@@ -1,5 +1,6 @@
 package Containers;
 
+import WarehouseRobot.RobComponents;
 import jade.core.Profile;
 import jade.util.ExtendedProperties;
 
@@ -29,16 +30,16 @@ public class RobotContainer extends BaseContainer {
     protected void createProperties() {
         properties = new ExtendedProperties();
         properties.setProperty(Profile.GUI, "false");
-        properties.setProperty(Profile.MAIN_HOST, "127.0.0.1");
+        properties.setProperty(Profile.MAIN_HOST, "192.168.0.181");
         properties.setProperty(Profile.MAIN_PORT, "1099");
-        properties.setProperty(Profile.LOCAL_HOST, "127.0.0.1");
+        properties.setProperty(Profile.LOCAL_HOST, "192.168.0.111");
         properties.setProperty(Profile.LOCAL_PORT, "1099");
 //        properties.setProperty(Profile.PLATFORM_ID, null);
     }
 
     @Override
     protected void createAgents() {
-//        RobComponents.init();
+        RobComponents.init();
         super.createAgents();
     }
 
