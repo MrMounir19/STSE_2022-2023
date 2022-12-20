@@ -1,9 +1,9 @@
 {
   "agents": ["ServerAgent"],
   "use_timestamp": false,
-  "local_host": "192.168.0.181",
+  "local_host": "127.0.0.1",
   "local_port": "1099",
-  "main_host": "192.168.0.181",
+  "main_host": "127.0.0.1",
   "main_port": "1099",
   "gui": true,
   "is_main": true,
