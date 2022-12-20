@@ -1,4 +1,11 @@
 {
   "agents": ["ServerAgent"],
-  "use_timestamp": false
+  "use_timestamp": false,
+  "local_host": "127.0.0.1",
+  "local_port": "1099",
+  "main_host": "127.0.0.1",
+  "main_port": "1099",
+  "gui": true,
+  "is_main": true,
+  "init_components": false
 }

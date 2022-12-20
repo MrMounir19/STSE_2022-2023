@@ -1,5 +1,5 @@
 {
-  "agents": ["RobotAgent"],
+  "agents": ["TestRobotAgent"],
   "use_timestamp": true,
   "uwb_id": 1234,
   "local_host": "127.0.0.1",

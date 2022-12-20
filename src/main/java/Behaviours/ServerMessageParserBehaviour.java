@@ -39,8 +39,14 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
 
         if (messageType == MessageType.Registration) {
             handleRegistrationMessage(message);
-        } else if (messageType == MessageType.Collision){
+        } else if (messageType == MessageType.Collision) {
             handleCollisionMessage(message);
+        } else if (messageType == MessageType.JobFinished) {
+            handleJobFinishedMessage(message);
+        } else if (messageType == MessageType.JobFailed) {
+            handleJobFailedMessage(message);
+        } else if (messageType == MessageType.JobRequest) {
+            handleJobRequestMessage(message);
         } else {
             System.out.println("Received message type not valid for server.");
         }
@@ -52,6 +58,13 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
     private void handleCollisionMessage(ACLMessage message) {
 
     }
-
-
+    private void handleJobFinishedMessage(ACLMessage message) {
+        myAgent.addBehaviour(new JobFinishedBehaviour(message));
+    }
+    private void handleJobFailedMessage(ACLMessage message) {
+        myAgent.addBehaviour(new JobFailedBehaviour(message));
+    }
+    private void handleJobRequestMessage(ACLMessage message) {
+        myAgent.addBehaviour(new JobAssignBehaviour(message));
+    }
 }

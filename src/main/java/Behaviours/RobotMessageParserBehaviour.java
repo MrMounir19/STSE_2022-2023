@@ -75,31 +75,13 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
 
     private void handleJobMessage(ACLMessage message) {
         // TODO: Handle if already working on a job.
-        System.out.println("REEEEEEEEEEEEEEEEEee");
         JsonObject payload = Messages.toJson(message.getContent());
         JsonObject data = payload.getAsJsonObject("data");
-        System.out.println("REEEEEEEEEEEEEEEEEee");
-        Gson gson = new Gson();
+
         Job job = new Job();
-        String action = data.get("action").getAsString();
-        JsonArray path = data.get("path").getAsJsonArray();
-        System.out.println("REEEEEEEEEEEEEEEEEee");
-        for (JsonElement json_pos : path) {
-            System.out.println("1");
-            float[] pos = gson.fromJson(json_pos, float[].class);
-            System.out.println("2");
-            Position position = new Position(pos[0], pos[1]);
-            System.out.println("3");
-            try {
-                job.path.add(position);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("4");
-        }
-        System.out.println("REEEEEEEEEEEEEEEEEee");
+        job.fromString(data.toString());
+
         RobotInformation.addJob(job);
-        System.out.println("REEEEEEEEEEEEEEEEEee");
     }
 
 }

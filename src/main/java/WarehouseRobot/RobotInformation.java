@@ -3,8 +3,6 @@ package WarehouseRobot;
 import WarehouseShared.Job;
 import WarehouseShared.Position;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
 // TODO Maybe merge with server robotobject but depends on separate functionality
@@ -14,8 +12,8 @@ public class RobotInformation {
     public static String robotId;
     public static Position masterPosition;
     public static String uwbID;
-    public static Position position;
-    public static float yaw;
+    public static Position position = new Position(0, 0);
+    public static float yaw = 0;
     public static boolean isInitialized = false;
 
     public static ArrayList<Position> positionHistory = new ArrayList<>();

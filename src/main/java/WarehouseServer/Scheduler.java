@@ -1,6 +1,7 @@
 package WarehouseServer;
 
 import WarehouseShared.Job;
+import WarehouseShared.Position;
 
 public class Scheduler {
     public static Job requestJob(RobotObject robot) {
@@ -25,12 +26,17 @@ public class Scheduler {
 
     private static Job findNearestJob(RobotObject robot) {
         Job nearestJob = null;
+        Position robotPosition = robot.position;
+        if (robot.position == null) {
+            robotPosition = new Position(0, 0);
+            System.out.println("Robot position is null. This should only happen during testing!");
+        }
         float nearestDistance = Float.MAX_VALUE;
         for (Job job : JobStorage.toDoJobs) {
             if (job.getSourcePosition() == null) {
                 continue;
             }
-            float distance = robot.position.distanceTo(job.getSourcePosition());
+            float distance = robotPosition.distanceTo(job.getSourcePosition());
             if (distance < nearestDistance) {
                 nearestJob = job;
                 nearestDistance = distance;
