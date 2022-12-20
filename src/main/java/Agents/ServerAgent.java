@@ -2,23 +2,14 @@ package Agents;
 
 import Behaviours.ServerMessageParserBehaviour;
 import Behaviours.UWBReceivingBehaviour;
-import WarehouseServer.RobotStorage;
+import Enums.JobType;
+import WarehouseServer.JobStorage;
 import WarehouseShared.Job;
 import WarehouseShared.Position;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
-import jade.lang.acl.ACLMessage;
-import lejos.utility.Delay;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -34,6 +25,19 @@ public class ServerAgent extends Agent {
     private final ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
     @Override
     protected void setup() {
+        /*
+        Create the very first job
+        TODO :: Remove
+         */
+        Job job = new Job();
+        job.setId(69);
+        job.setAction(JobType.PickUp);
+        ArrayList<Position> path =  new ArrayList<>();
+        path.add(new Position(8000, 15000));
+        job.setPath(path);
+        JobStorage.addToDoJob(job);
+
+        // Now add the behaviours
         Behaviour serverMessageParserBehaviour = new ServerMessageParserBehaviour();
         Behaviour uwbReceivingBehaviour = new UWBReceivingBehaviour();
         addBehaviour(tbf.wrap(serverMessageParserBehaviour));

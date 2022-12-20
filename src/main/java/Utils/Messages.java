@@ -1,7 +1,6 @@
 package Utils;
 
 import Enums.CollisionAction;
-import Enums.JobType;
 import Enums.MessageType;
 import WarehouseShared.Job;
 import com.google.gson.JsonObject;
@@ -9,7 +8,6 @@ import com.google.gson.JsonParser;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
-import java.util.ArrayList;
 
 /**
  * Util class to create messages of the system
@@ -66,7 +64,7 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': '" + MessageType.Collision + "', 'data': {'action': " + action.toString() + "}}";
+        String payload = "{'messageType': '" + MessageType.Collision + "', 'data': {'action': '" + action.toString() + "'}}";
 
         message.setContent(payload);
 
