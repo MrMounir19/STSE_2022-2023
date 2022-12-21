@@ -7,7 +7,6 @@ import WarehouseShared.Position;
 import jade.core.behaviours.CyclicBehaviour;
 import WarehouseRobot.MotorControl;
 import lejos.utility.Delay;
-import java.util.ArrayList;
 
 /**
  * Handles the reoccurring standard behaviours of our physical robot.
@@ -34,7 +33,11 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         // If the robot does not have a job, take one from the queue
         if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
             System.out.println("Taking first job");
-            Delay.msDelay(3000);
+            int delay = 0;
+            while ((int)RobotInformation.position.x == 0 && (int)RobotInformation.position.y == 0 && delay < 10) {
+                delay += 1;
+                Delay.msDelay(300);
+            }
             RobotInformation.takeJobFromQueue();
             //RobotInformation.currentJob.advanceGoal();  // to get the first goal from the new job
         }
@@ -45,7 +48,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             Position targetpos = RobotInformation.currentJob.getCurrentGoal();
             System.out.println("robot-x: " + RobotInformation.position.x + " | robot-y: " + RobotInformation.position.y);
             System.out.println("goal x: " + targetpos.x +" | goal y: " + targetpos.y);
-            Position p = RobotInformation.position;
+            Position p = getAccuratePosition();
 
             // Calculate the angle to the target position
             float yaw = (float) Math.toDegrees(RobotInformation.yaw);
@@ -69,7 +72,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
 
                 yaw = (float) Math.toDegrees(RobotInformation.yaw);
                 diff_angle = correctAngle(target_angle - yaw);
-                System.out.println(diff_angle);
+                System.out.println("Angle: " + diff_angle);
             }
 
             // ------------------ Go to goal ------------------
@@ -95,27 +98,28 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
 
                 // Forward with slight rotation if we deviate
                 int diff_angle_margin = 2;
-                int diff_angle_div_margin = 180 - 10;   // a margin of 10 on the standard 180-degree angle
+                int diff_angle_div_margin = 180 - 100;   // a margin of 10 on the standard 180-degree angle
+                System.out.println("diff_angle: " + diff_angle);
                 if (diff_angle > diff_angle_margin) {
-                    System.out.println("correcting");
-                    MotorControl.moveForwardPrecise(MotorControl.fastSpeed, 1, 1 + diff_angle / diff_angle_div_margin);
-                } else if (diff_angle < - diff_angle_margin) {
-                    System.out.println("correcting");
+                    System.out.println("correcting left");
                     MotorControl.moveForwardPrecise(MotorControl.fastSpeed, 1 + diff_angle / diff_angle_div_margin, 1);
+                } else if (diff_angle < - diff_angle_margin) {
+                    System.out.println("correcting right");
+                    MotorControl.moveForwardPrecise(MotorControl.fastSpeed, 1, 1 + diff_angle / diff_angle_div_margin);
                 } else {
                     MotorControl.moveForward();
                 }
                 //TODO smoothen this since the location can jitter
                 System.out.println("X dist: " + Math.abs(RobotInformation.position.x - targetpos.x) + " | y dist: " + Math.abs(RobotInformation.position.y - targetpos.y));
-                System.out.println("x pos: " + RobotInformation.position.x + " | ypos: " + RobotInformation.position.y);
+                System.out.println("x pos: " + RobotInformation.position.x + " | y pos: " + RobotInformation.position.y);
                 System.out.println("target x pos: " + targetpos.x + " | targetypos: " + targetpos.y);
 
-                if (Math.abs(RobotInformation.position.x - targetpos.x) < 200 && Math.abs(RobotInformation.position.y - targetpos.y) < 200) {
+                if (Math.abs(RobotInformation.position.x - targetpos.x) < 300 && Math.abs(RobotInformation.position.y - targetpos.y) < 300) {
                     MotorControl.setSpeed(MotorControl.mediumSpeed);
-                    if (Math.abs(RobotInformation.position.x - targetpos.x) < 100 && Math.abs(RobotInformation.position.y - targetpos.y) < 100) {
+                    if (Math.abs(RobotInformation.position.x - targetpos.x) < 200 && Math.abs(RobotInformation.position.y - targetpos.y) < 200) {
                         System.out.println("X dist: " + Math.abs(RobotInformation.position.x - targetpos.x) + " | y dist: " + Math.abs(RobotInformation.position.x - targetpos.y));
                         // Tell system to move on to the next goal
-                        System.out.println("reach goal");
+                        System.out.println("reached goal");
                         MotorControl.stopMotors();
                         Delay.msDelay(1000);
                         RobotInformation.currentJob.advanceGoal();
@@ -126,7 +130,6 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 }
             }
             // TODO: Send finish (or failure) job message and remove current job.
-            // See Maxim & Thimoty branch for these messages.
         }
     }
 
@@ -134,6 +137,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
      * Fix for first time orientation:
      * Wait for 3000 ms, and take average of coordinates over this time.
      * This is necessary because the POZYX system is not entirely accurate.
+     * TODO: DEPRECATED
      *
      * @author Anthony
      * @author Senne
@@ -141,17 +145,31 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
      */
     private void initializeRobot(){
         System.out.println("Init");
-        RobotInformation.clearHistory();
-        Delay.msDelay(3000);
+        RobotInformation.isInitialized = true;
+    }
+
+    /**
+     * Take average of last 5 positions to calculate accurate position.
+     * This is necessary because the POZYX system is not entirely accurate.
+     *
+     * @author Anthony
+     * @author Senne
+     * @since 19/12/2022
+     */
+    private Position getAccuratePosition() {
+        RobotInformation.clearHistory();    // TODO: Don't wipe, but just fetch last 5 positions?
+        while (RobotInformation.positionHistory.size() < 5) {
+            Delay.msDelay(100);
+        }
         Position p = new Position(0, 0);
-        ArrayList<Position> historyCopy = RobotInformation.positionHistory;
-        for (Position temppos : historyCopy) {
+        for (Position temppos : RobotInformation.positionHistory) {
             p.x += temppos.x;
             p.y += temppos.y;
         }
-        p.x /= historyCopy.size();
-        p.y /= historyCopy.size();
-        RobotInformation.isInitialized = true;
+        p.x /= RobotInformation.positionHistory.size();
+        p.y /= RobotInformation.positionHistory.size();
+
+        return p;
     }
 
     /**
