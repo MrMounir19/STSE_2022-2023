@@ -50,7 +50,7 @@ public class RobotInformation {
     public static void takeJobFromQueue() {
         currentJob = jobs.remove(0);
         if (currentJob.currentGoal == null) {
-            currentJob.setCurrentGoal(currentJob.path.remove(0));
+            currentJob.setCurrentGoal(currentJob.path.get(0));
             System.out.println(RobotInformation.position.x + " " + RobotInformation.position.y);
             currentJob.previousGoal = RobotInformation.position;
         }
