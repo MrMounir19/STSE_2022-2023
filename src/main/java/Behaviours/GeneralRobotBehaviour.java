@@ -34,6 +34,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         // If the robot does not have a job, take one from the queue
         if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
             System.out.println("Taking first job");
+            Delay.msDelay(3000);
             RobotInformation.takeJobFromQueue();
             //RobotInformation.currentJob.advanceGoal();  // to get the first goal from the new job
         }
@@ -42,6 +43,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             Delay.msDelay(150);
             // Get the position of the job goal
             Position targetpos = RobotInformation.currentJob.getCurrentGoal();
+            System.out.println("robot-x: " + RobotInformation.position.x + " | robot-y: " + RobotInformation.position.y);
             System.out.println("goal x: " + targetpos.x +" | goal y: " + targetpos.y);
             Position p = RobotInformation.position;
 

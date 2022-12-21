@@ -33,7 +33,10 @@ public class ServerAgent extends Agent {
         job.setId(69);
         job.setAction(JobType.PickUp);
         ArrayList<Position> path =  new ArrayList<>();
-        path.add(new Position(8000, 15000));
+        path.add(new Position(7170, 16270));
+        path.add(new Position(7130, 15230));
+        path.add(new Position(8700, 14100));
+        path.add(new Position(8540, 15900));
         job.setPath(path);
         JobStorage.addToDoJob(job);
 
