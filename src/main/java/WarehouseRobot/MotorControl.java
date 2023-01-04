@@ -53,8 +53,8 @@ public class MotorControl {
      */
     public static void turnLeftInPlace() {
         applyToBoth(speed);
-        RobComponents.motorL.forward();
-        RobComponents.motorR.backward();
+        RobComponents.motorL.backward();
+        RobComponents.motorR.forward();
         Delay.msDelay(controlDelayMs);
     }
 
@@ -63,8 +63,8 @@ public class MotorControl {
      */
     public static void turnRightInPlace() {
         applyToBoth(speed);
-        RobComponents.motorL.backward();
-        RobComponents.motorR.forward();
+        RobComponents.motorL.forward();
+        RobComponents.motorR.backward();
         Delay.msDelay(controlDelayMs);
     }
 
@@ -98,8 +98,8 @@ public class MotorControl {
     }
 
     public static void moveForwardPrecise(int speed, float leftSpeedMultiplier, float rightSpeedMultiplier) {
-        System.out.println("Right speed: " + (invertControls * speed * leftSpeedMultiplier));
-        System.out.println("Left speed: " + (invertControls * speed * rightSpeedMultiplier));
+        System.out.println("new Left speed: " + (invertControls * speed * leftSpeedMultiplier));
+        System.out.println("new Right speed: " + (invertControls * speed * rightSpeedMultiplier));
 
         RobComponents.motorL.setSpeed((int) (invertControls * speed * leftSpeedMultiplier));
         RobComponents.motorR.setSpeed((int) (invertControls * speed * rightSpeedMultiplier));
