@@ -98,8 +98,8 @@ public class MotorControl {
     }
 
     public static void moveForwardPrecise(int speed, float leftSpeedMultiplier, float rightSpeedMultiplier) {
-        System.out.println("Left speed: " + (invertControls * speed * leftSpeedMultiplier));
-        System.out.println("Rightspeed speed: " + (invertControls * speed * rightSpeedMultiplier));
+        System.out.println("Right speed: " + (invertControls * speed * leftSpeedMultiplier));
+        System.out.println("Left speed: " + (invertControls * speed * rightSpeedMultiplier));
 
         RobComponents.motorL.setSpeed((int) (invertControls * speed * leftSpeedMultiplier));
         RobComponents.motorR.setSpeed((int) (invertControls * speed * rightSpeedMultiplier));
