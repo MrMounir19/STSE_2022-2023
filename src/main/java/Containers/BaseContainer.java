@@ -1,6 +1,7 @@
 package Containers;
 
 import Utils.Messages;
+import WarehouseShared.Config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import jade.core.Profile;
@@ -37,6 +38,7 @@ public class BaseContainer {
     public BaseContainer() {
         String defaultConfig = "{'agents': [], 'use_timestamp': true}";
         this.config = Messages.toJson(defaultConfig);
+        Config.setConfig(this.config);
     }
 
     public void setConfigFromPath(String path) {
