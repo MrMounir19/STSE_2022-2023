@@ -108,6 +108,14 @@ public class BaseContainer {
         }
     }
 
+    protected void preAgents(){
+
+    }
+
+    protected void postAgents(){
+
+    }
+
     public void start() {
         System.out.println("[ ] Container starting...");
         try {
@@ -123,12 +131,19 @@ public class BaseContainer {
             System.out.println("\t[ ] Creating container...");
             createContainer();
             System.out.println("\t[X] Container created!");
+            System.out.println("\t[ ] Run PreAgents!");
+            preAgents();
+            System.out.println("\t[X] Ran PreAgents!");
             System.out.println("\t[ ] Creating agent(s)...");
             createAgents();
             System.out.println("\t[X] Agent(s) created!");
             System.out.println("\t[ ] Starting agent(s)...");
             startAgents();
             System.out.println("\t[X] Agent(s) started!");
+            System.out.println("\t[ ] Run PostAgents!");
+            postAgents();
+            System.out.println("\t[X] Ran PostAgents!");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
