@@ -60,7 +60,7 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                             if (robot.get("tagId").getAsString().equals("26702")) {
                                 RobotInformation.setMasterPosition(coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat());
                             }
-                            if (myAgent.getAID().getName().contains("ServerAgent")) {
+                            if (myAgent.getAID().getLocalName().contains("ServerAgent")) {
                                 RobotStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                             } else {
                                 //TODO not hardcoded
