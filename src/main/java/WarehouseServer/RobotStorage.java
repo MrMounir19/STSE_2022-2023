@@ -21,6 +21,10 @@ public class RobotStorage {
         System.out.println("Registered robots: " + robots);
     }
 
+    public static ArrayList<RobotObject> getRobots() {
+        return robots;
+    }
+
     public static boolean checkRobot(String robotID) {
         return getFromID(robotID) != null;
     }
