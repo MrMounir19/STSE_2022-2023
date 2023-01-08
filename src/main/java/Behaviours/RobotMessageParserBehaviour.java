@@ -1,5 +1,6 @@
 package Behaviours;
 
+import Enums.CollisionAction;
 import Enums.MessageType;
 import WarehouseShared.Job;
 import Utils.Messages;
@@ -62,9 +63,12 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
         } else if (messageType == MessageType.Job) {
             System.out.println("Start check");
             handleJobMessage(message);
+        } else if (messageType == MessageType.Collision) {
+            handleCollisionMessage(message);
         } else {
             System.out.println("Received message type not valid for robot.");
         }
+
     }
 
     private void handleRegistrationConfirmationMessage(ACLMessage message) {
@@ -82,6 +86,18 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
         job.fromString(data.toString());
 
         RobotInformation.addJob(job);
+    }
+
+    private void handleCollisionMessage(ACLMessage message) {
+        // TODO
+        // Will need a state of some kind that can be toggled to force the robot to stop. @Anthony @Senne
+
+        JsonObject payload = Messages.toJson(message.getContent());
+        String collisionActionStr = payload.getAsJsonObject("data").getAsJsonObject("action").getAsString();
+        CollisionAction collisionAction = CollisionAction.valueOf(collisionActionStr);
+
+        // If Continue: force stop is off
+        // If Stop: force stop is on
     }
 
 }
