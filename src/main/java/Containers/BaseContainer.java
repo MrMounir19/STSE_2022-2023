@@ -50,11 +50,14 @@ public class BaseContainer {
             throw new RuntimeException(e);
         }
 
-        this.setConfig(Messages.toJson(configContent));
+        if (configContent != null) {
+            this.setConfig(Messages.toJson(configContent));
+        }
     }
 
     public void setConfig(JsonObject config) {
         this.config = config;
+        Config.setConfig(this.config);
     }
 
     protected void createAgents() {
