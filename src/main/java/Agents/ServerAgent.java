@@ -1,25 +1,13 @@
 package Agents;
 
+import Behaviours.GeneralServerBehaviour;
+import Behaviours.JobGeneratorBehaviour;
 import Behaviours.ServerMessageParserBehaviour;
 import Behaviours.UWBReceivingBehaviour;
-import WarehouseServer.RobotStorage;
-import WarehouseShared.Job;
-import WarehouseShared.Position;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import jade.core.AID;
+import WarehouseShared.Config;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
-import jade.lang.acl.ACLMessage;
-import lejos.utility.Delay;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 /**
  * This agent is used for the server.
@@ -36,7 +24,14 @@ public class ServerAgent extends Agent {
     protected void setup() {
         Behaviour serverMessageParserBehaviour = new ServerMessageParserBehaviour();
         Behaviour uwbReceivingBehaviour = new UWBReceivingBehaviour();
+        Behaviour generalServerBehaviour = new GeneralServerBehaviour();
         addBehaviour(tbf.wrap(serverMessageParserBehaviour));
         addBehaviour(tbf.wrap(uwbReceivingBehaviour));
+        addBehaviour(tbf.wrap(generalServerBehaviour));
+
+        if (Config.getConfig().get("useJobGenerator").getAsBoolean()) {
+            Behaviour jobGeneratorBehaviour = new JobGeneratorBehaviour();
+            addBehaviour(tbf.wrap(jobGeneratorBehaviour));
+        }
     }
 }
