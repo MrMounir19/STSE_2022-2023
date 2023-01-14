@@ -41,7 +41,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         if (RobotInformation.currentJob != null) {
             Delay.msDelay(150);
             // Get the position of the job goal
-            Position targetpos = RobotInformation.currentJob.getCurrentGoal();
+            Position targetpos = RobotInformation.currentJob.getDestination();
             System.out.println("goal x: " + targetpos.x +" | goal y: " + targetpos.y);
             Position p = RobotInformation.position;
 
@@ -71,7 +71,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             }
 
             // ------------------ Go to goal ------------------
-            while (!RobotInformation.currentJob.GoalFinished()) {
+            while (!(RobotInformation.position.distanceTo(RobotInformation.currentJob.getDestination()) < 100)) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
                 Delay.msDelay(100);
 
                 // Collision check
@@ -116,7 +116,8 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                         System.out.println("reach goal");
                         MotorControl.stopMotors();
                         Delay.msDelay(1000);
-                        RobotInformation.currentJob.advanceGoal();
+//                        RobotInformation.currentJob.advanceGoal();
+                        // TODO: This is no longer required ^
                         break;
                     }
                 } else {

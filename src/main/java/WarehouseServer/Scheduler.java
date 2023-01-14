@@ -35,10 +35,7 @@ public class Scheduler {
         }
         float nearestDistance = Float.MAX_VALUE;
         for (Job job : JobStorage.toDoJobs) {
-            if (job.getSourcePosition() == null) {
-                continue;
-            }
-            float distance = robotPosition.distanceTo(job.getSourcePosition());
+            float distance = robotPosition.distanceTo(job.getDestination());
             if (distance < nearestDistance) {
                 nearestJob = job;
                 nearestDistance = distance;
