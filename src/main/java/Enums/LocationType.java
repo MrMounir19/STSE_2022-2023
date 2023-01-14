@@ -1,7 +1,7 @@
 package Enums;
 
 public enum LocationType {
-    triagingStations,
-    chargingStations,
-    dropOffStations
+    triagingStation,
+    chargingStation,
+    dropOffStation
 }
