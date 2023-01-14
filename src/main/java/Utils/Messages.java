@@ -1,15 +1,14 @@
 package Utils;
 
 import Enums.CollisionAction;
-import Enums.JobType;
+import Enums.LocationType;
 import Enums.MessageType;
 import WarehouseShared.Job;
+import WarehouseShared.Position;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-
-import java.util.ArrayList;
 
 /**
  * Util class to create messages of the system
@@ -70,6 +69,28 @@ public class Messages {
         message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
 
         String payload = "{'messageType': '" + MessageType.Collision + "', 'data': {'action': " + action.toString() + "}}";
+
+        message.setContent(payload);
+
+        return message;
+    }
+
+    public static ACLMessage locationRequestMessage(LocationType locationType) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
+
+        String payload = "{'messageType': '" + MessageType.LocationRequest + "', 'data': {'locationType': " + locationType.toString() + "}}";
+
+        message.setContent(payload);
+
+        return message;
+    }
+
+    public static ACLMessage locationRequestReplyMessage(String targetAgent, Position locationPosition) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
+
+        String payload = "{'messageType': '" + MessageType.LocationRequest + "', 'data': {'position': " + locationPosition.toJsonArray() + "}}";
 
         message.setContent(payload);
 
