@@ -2,25 +2,23 @@ package Behaviours;
 
 import WarehouseServer.JobStorage;
 import WarehouseServer.RobotObject;
-import WarehouseShared.Job;
+import WarehouseServer.RobotStorage;
 import jade.core.behaviours.CyclicBehaviour;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 public class GeneralServerBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
         checkIdleRobots();
+        block(1000);
     }
 
-    private void checkIdleRobots(){
-        for(Map.Entry<RobotObject, ArrayList<Job>> set : JobStorage.robotJobs.entrySet()){
-            if(!set.getValue().isEmpty()){
+    private void checkIdleRobots() {
+        for(RobotObject robotObject : RobotStorage.getRobots()){
+            if(!JobStorage.checkRobotIdle(robotObject)){
                 continue;
             }
-            handleIdleRobot(set.getKey().getRobotId());
+            handleIdleRobot(robotObject.getRobotId());
         }
     }
 
