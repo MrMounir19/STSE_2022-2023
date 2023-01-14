@@ -8,6 +8,8 @@ public enum MessageType {
     JobFinished,
     JobFailed,
 
+    LocationRequest,
+
     //ServerSide
     Registration,
     Collision,
