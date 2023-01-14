@@ -1,6 +1,7 @@
 package Containers;
 
 import Utils.Messages;
+import WarehouseShared.Config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import jade.core.Profile;
@@ -37,6 +38,7 @@ public class BaseContainer {
     public BaseContainer() {
         String defaultConfig = "{'agents': [], 'use_timestamp': true}";
         this.config = Messages.toJson(defaultConfig);
+        Config.setConfig(this.config);
     }
 
     public void setConfigFromPath(String path) {
@@ -48,11 +50,14 @@ public class BaseContainer {
             throw new RuntimeException(e);
         }
 
-        this.setConfig(Messages.toJson(configContent));
+        if (configContent != null) {
+            this.setConfig(Messages.toJson(configContent));
+        }
     }
 
     public void setConfig(JsonObject config) {
         this.config = config;
+        Config.setConfig(this.config);
     }
 
     protected void createAgents() {
@@ -106,6 +111,14 @@ public class BaseContainer {
         }
     }
 
+    protected void preAgents(){
+
+    }
+
+    protected void postAgents(){
+
+    }
+
     public void start() {
         System.out.println("[ ] Container starting...");
         try {
@@ -121,12 +134,19 @@ public class BaseContainer {
             System.out.println("\t[ ] Creating container...");
             createContainer();
             System.out.println("\t[X] Container created!");
+            System.out.println("\t[ ] Run PreAgents!");
+            preAgents();
+            System.out.println("\t[X] Ran PreAgents!");
             System.out.println("\t[ ] Creating agent(s)...");
             createAgents();
             System.out.println("\t[X] Agent(s) created!");
             System.out.println("\t[ ] Starting agent(s)...");
             startAgents();
             System.out.println("\t[X] Agent(s) started!");
+            System.out.println("\t[ ] Run PostAgents!");
+            postAgents();
+            System.out.println("\t[X] Ran PostAgents!");
+
         } catch (Exception e) {
             e.printStackTrace();
         }

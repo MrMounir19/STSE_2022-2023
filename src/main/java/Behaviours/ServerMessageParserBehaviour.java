@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-import java.util.Objects;
 /**
  * Parses messages received by the server and creates one-shot behaviours in response.
  *
@@ -65,6 +64,6 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
         myAgent.addBehaviour(new JobFailedBehaviour(message));
     }
     private void handleJobRequestMessage(ACLMessage message) {
-        myAgent.addBehaviour(new JobAssignBehaviour(message));
+        myAgent.addBehaviour(new JobAssignBehaviour(message.getSender().getLocalName()));
     }
 }

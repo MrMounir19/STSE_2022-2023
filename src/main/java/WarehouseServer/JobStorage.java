@@ -3,7 +3,9 @@ package WarehouseServer;
 import WarehouseShared.Job;
 
 import java.awt.*;
+import java.security.KeyException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Util class to create messages of the system
@@ -17,10 +19,42 @@ public class JobStorage {
     public static ArrayList<Job> inProgressJobs = new ArrayList<>();
     public static ArrayList<Job> finishedJobs = new ArrayList<>();
 
+    public static HashMap<RobotObject, ArrayList<Job>> robotJobs = new HashMap<RobotObject, ArrayList<Job>>();
+
     public static void addToDoJob(Job job) {
         System.out.println("Adding Job to Queue: " + job.toString());
         toDoJobs.add(job);
         System.out.println("Added a Job to the Queue: " + toDoJobs.get(toDoJobs.size() - 1).toString());
+    }
+
+    public static void addJobToRobot(RobotObject robot, Job job){
+        if(!robotJobs.containsKey(robot)){
+            robotJobs.put(robot, new ArrayList<Job>());
+        }
+        try{
+            robotJobs.get(robot).add(job);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removeJobFromRobot(RobotObject robot, Job job){
+        if(!robotJobs.containsKey(robot)){
+            throw new RuntimeException();
+        }
+
+        try{
+            robotJobs.get(robot).remove(job);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean checkRobotIdle(RobotObject robot){
+        if(!robotJobs.containsKey(robot)) return false;
+
+        return robotJobs.get(robot).isEmpty();
     }
 
     public static void addInProgressJob(Job job) {

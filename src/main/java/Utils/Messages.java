@@ -60,11 +60,14 @@ public class Messages {
     }
 
     /**
-     * TODO: What is this message for?
+     * Informs a robot that it has entered collision avoidance.
+     * A "STOP" means it has to stop and wait, and a "CONTINUE" means it can continue.
+     * Typically, robot 1 will receive a "CONTINUE", while robot 2 will receive a "STOP" until it can "CONTINUE".
+     * This allows robot 1 to clear the area.
      */
-    public static ACLMessage collisionMessage(CollisionAction action) {
+    public static ACLMessage collisionMessage(String targetAgent, CollisionAction action) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-        message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
+        message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
 
         String payload = "{'messageType': '" + MessageType.Collision + "', 'data': {'action': " + action.toString() + "}}";
 
