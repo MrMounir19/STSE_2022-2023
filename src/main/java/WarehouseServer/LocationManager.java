@@ -22,17 +22,17 @@ public class LocationManager {
     public static ArrayList<Position> chargingStations = new ArrayList<>();
     public static ArrayList<Position> dropOffStations = new ArrayList<>();
 
-    public static void createLocation(LocationType location){
+    public static void createLocation(LocationType location) {
         try{
             ArrayList<Position> positions = new ArrayList<>();
-            for (JsonElement element : Config.getConfig().get(location.toString()).getAsJsonArray()){
+            for (JsonElement element : Config.getConfig().get(location.toString()).getAsJsonArray()) {
                 JsonArray jsonPosition = element.getAsJsonArray();
                 float x = jsonPosition.get(0).getAsFloat();
                 float y = jsonPosition.get(1).getAsFloat();
                 positions.add(new Position(x,y));
             }
 
-            switch(location){
+            switch(location) {
                 case triagingStations:
                     triagingStations = positions;
                     break;
@@ -48,7 +48,7 @@ public class LocationManager {
         }
     }
 
-   public static void createLocations(){
+   public static void createLocations() {
         createLocation(LocationType.triagingStations);
         createLocation(LocationType.chargingStations);
         createLocation(LocationType.dropOffStations);
@@ -86,7 +86,7 @@ public class LocationManager {
        return nearestLocation;
    }
 
-   public static Position getNearestRobotLocation(RobotObject robot, LocationType location){
+   public static Position getNearestRobotLocation(RobotObject robot, LocationType location) {
         return getNearestLocation(robot.position, location);
    }
 
