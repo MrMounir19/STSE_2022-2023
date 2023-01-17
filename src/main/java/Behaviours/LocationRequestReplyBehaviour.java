@@ -25,7 +25,11 @@ public class LocationRequestReplyBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
+        System.out.println("Location reply action");
         RobotObject robot = RobotStorage.getFromACLMessage(message);
+        System.out.println(robot);
+        System.out.println(RobotStorage.robots);
+        System.out.println("---------------------------------");
         String content = message.getContent();
         String locationTypeStr = Messages.toJson(content).get("data").getAsJsonObject().get("locationType").getAsString();
         LocationType locationType = LocationType.valueOf(locationTypeStr);

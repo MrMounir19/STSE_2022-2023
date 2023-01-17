@@ -41,6 +41,8 @@ public class LocationManager {
                     break;
                 case dropOffStation:
                     dropOffStations = positions;
+                    System.out.println("DROPOFF STATIONS ----------");
+                    System.out.println(dropOffStations);
                     break;
             }
 
@@ -56,35 +58,48 @@ public class LocationManager {
    }
 
    public static Position getNearestLocation(Position pos, LocationType location) {
-        ArrayList<Position> locationArray = null;
-       switch(location){
-           case triagingStation:
-               locationArray = triagingStations;
-               break;
-           case chargingStation:
-               locationArray = chargingStations;
-               break;
-           case dropOffStation:
-               locationArray = dropOffStations;
-               break;
-       }
+        try {
+            ArrayList<Position> locationArray = null;
+            switch (location) {
+                case triagingStation:
+                    locationArray = triagingStations;
+                    break;
+                case chargingStation:
+                    locationArray = chargingStations;
+                    break;
+                case dropOffStation:
+                    locationArray = dropOffStations;
+                    break;
+            }
 
-       Position nearestLocation = null;
-       float nearestDistance = Float.MAX_VALUE;
-       for (Position loc : locationArray) {
-           float distance = (float) Math.sqrt(Math.pow(pos.x - loc.x, 2) + Math.pow(pos.y - loc.y, 2));
-           if (distance < nearestDistance) {
-               nearestLocation = loc;
-           }
-       }
-
-       if (nearestLocation == null) {
-           if (chargingStations.size() > 0) {
-               nearestLocation = chargingStations.get(0);
-           }
-       }
-
-       return nearestLocation;
+            Position nearestLocation = null;
+            System.out.println("1");
+            float nearestDistance = Float.MAX_VALUE;
+            System.out.println("2");
+            System.out.println(nearestDistance);
+            System.out.println(locationArray);
+            System.out.println(location);
+            for (Position loc : locationArray) {
+                System.out.println(pos);
+                System.out.println(loc);
+                float distance = (float) Math.sqrt(Math.pow(pos.x - loc.x, 2) + Math.pow(pos.y - loc.y, 2));
+                System.out.println("Distance");
+                if (distance < nearestDistance) {
+                    nearestLocation = loc;
+                }
+            }
+            System.out.println(nearestLocation);
+            System.out.println("3");
+            if (nearestLocation == null) {
+                if (chargingStations.size() > 0) {
+                    nearestLocation = chargingStations.get(0);
+                }
+            }
+            return nearestLocation;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
    }
 
    public static Position getNearestRobotLocation(RobotObject robot, LocationType location) {

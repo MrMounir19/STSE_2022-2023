@@ -4,7 +4,11 @@ import Behaviours.GeneralServerBehaviour;
 import Behaviours.JobGeneratorBehaviour;
 import Behaviours.ServerMessageParserBehaviour;
 import Behaviours.UWBReceivingBehaviour;
+import WarehouseServer.JobStorage;
 import WarehouseShared.Config;
+import WarehouseShared.Job;
+import WarehouseShared.Position;
+import com.google.gson.JsonArray;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
@@ -32,6 +36,10 @@ public class ServerAgent extends Agent {
         if (Config.getConfig().get("useJobGenerator").getAsBoolean()) {
             Behaviour jobGeneratorBehaviour = new JobGeneratorBehaviour();
             addBehaviour(tbf.wrap(jobGeneratorBehaviour));
+        } else {
+            Job newJob = new Job();
+            newJob.setDestination(new Position(7170, 16270));
+            JobStorage.addToDoJob(newJob);
         }
     }
 }

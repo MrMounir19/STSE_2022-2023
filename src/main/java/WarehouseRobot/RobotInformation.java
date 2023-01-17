@@ -50,15 +50,16 @@ public class RobotInformation {
 
     public static void addJob(Job job) {
         jobs.add(job);
-        if (currentJob == null) {
-            takeJobFromQueue();
-        }
+//        if (currentJob == null) {
+//            takeJobFromQueue();
+//        }
     }
 
     public static void takeJobFromQueue() {
         if (jobs.size() > 0) {
             currentJob = jobs.remove(0);
             jobStartPosition = position;    // TODO: Needs to be a copy?
+            currentDestination = currentJob.getDestination();
         }
         else {
             currentJob = null;

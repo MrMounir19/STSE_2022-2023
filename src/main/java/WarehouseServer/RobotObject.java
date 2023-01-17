@@ -7,8 +7,9 @@ public class RobotObject {
     public String uwbID;
     public Position position;
     public float yaw;
-    public RobotObject(String id) {
+    public RobotObject(String id, String uwb_id) {
         robotId = id;
+        uwbID = uwb_id;
     }
 
     public String getRobotId() {

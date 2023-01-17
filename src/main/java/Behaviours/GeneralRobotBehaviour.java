@@ -1,5 +1,7 @@
 package Behaviours;
 
+import Enums.ActivityState;
+import Enums.LocationType;
 import Utils.Messages;
 import WarehouseRobot.RobotInformation;
 import WarehouseRobot.SensorControl;
@@ -7,6 +9,8 @@ import WarehouseShared.Position;
 import jade.core.behaviours.CyclicBehaviour;
 import WarehouseRobot.MotorControl;
 import lejos.utility.Delay;
+
+import java.awt.*;
 
 /**
  * Handles the reoccurring standard behaviours of our physical robot.
@@ -27,8 +31,8 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         }
         if (RobotInformation.jobs.size() == 0) {
             myAgent.send(Messages.requestJobMessage());
-            // TODO: Block for X ms to receive & store job(s)?
             // Potentially request multiple?
+            block(1000);
         }
         // If the robot does not have a job, take one from the queue
         if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
@@ -39,13 +43,13 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 Delay.msDelay(300);
             }
             RobotInformation.takeJobFromQueue();
-            //RobotInformation.currentJob.advanceGoal();  // to get the first goal from the new job
+            RobotInformation.activityState = ActivityState.PickingUp;
         }
         // When the robot has a job
-        if (RobotInformation.currentJob != null) {
+        if (RobotInformation.currentDestination != null && RobotInformation.activityState != ActivityState.Idle) {
             Delay.msDelay(150);
             // Get the position of the job goal
-            Position targetpos = RobotInformation.currentJob.getDestination();
+            Position targetpos = RobotInformation.currentDestination;
             System.out.println("goal x: " + targetpos.x +" | goal y: " + targetpos.y);
             Position p = getAccuratePosition();
 
@@ -75,7 +79,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             }
 
             // ------------------ Go to goal ------------------
-            while (!(RobotInformation.position.distanceTo(RobotInformation.currentJob.getDestination()) < 100)) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
+            while (!(RobotInformation.position.distanceTo(RobotInformation.currentDestination) < 100)) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
                 Delay.msDelay(100);
 
                 // Collision check
@@ -122,15 +126,26 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                         System.out.println("reached goal");
                         MotorControl.stopMotors();
                         Delay.msDelay(1000);
-//                        RobotInformation.currentJob.advanceGoal();
-                        // TODO: This is no longer required ^
+                        RobotInformation.currentDestination = null;
+                        if (RobotInformation.activityState == ActivityState.PickingUp) {
+                            System.out.println("request dropoff");
+                            myAgent.send(Messages.locationRequestMessage(LocationType.dropOffStation));
+                            Delay.msDelay(5000);
+                            System.out.println("message sent");
+                            RobotInformation.activityState = ActivityState.DroppingOff;
+                        } else {
+                            System.out.println("finish job");
+                            RobotInformation.activityState = ActivityState.Idle;
+                            myAgent.send(Messages.finishedJobMessage(RobotInformation.currentJob));
+                            Delay.msDelay(5000);
+                            RobotInformation.currentJob = null;
+                        }
                         break;
                     }
                 } else {
                     MotorControl.setSpeed(MotorControl.mediumSpeed);
                 }
             }
-            // TODO: Send finish (or failure) job message and remove current job.
         }
     }
 

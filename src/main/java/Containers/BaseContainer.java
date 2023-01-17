@@ -62,15 +62,20 @@ public class BaseContainer {
 
     protected void createAgents() {
         try {
+            System.out.println("super create agents");
             for (JsonElement element : config.get("agents").getAsJsonArray()) {
+                System.out.println("1");
                 String agentName = element.getAsString();
                 String nickname = agentName;
+                System.out.println("2");
                 if (config.get("use_timestamp").getAsBoolean()) {
                     nickname = nickname + Instant.now().getEpochSecond();
                 }
                 System.out.println("\t- Creating " + agentName + " (" + nickname + ")");
+                System.out.println(agents);
                 agents.add(agentContainer.createNewAgent(nickname, "Agents." + agentName, new Object[]{}));
             }
+            System.out.println("finished super agents");
         } catch (StaleProxyException e) {
             throw new RuntimeException(e);
         }

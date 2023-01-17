@@ -5,6 +5,7 @@ import Enums.MessageType;
 import WarehouseShared.Job;
 import Utils.Messages;
 import WarehouseRobot.RobotInformation;
+import WarehouseShared.Position;
 import com.google.gson.JsonObject;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -53,11 +54,12 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
 
         if (messageType == MessageType.RegistrationConfirmation) {
             handleRegistrationConfirmationMessage(message);
-
         } else if (messageType == MessageType.Job) {
             handleJobMessage(message);
         } else if (messageType == MessageType.Collision) {
             handleCollisionMessage(message);
+        } else if (messageType == MessageType.LocationRequest) {
+            handleLocationRequestReply(message);
         } else {
             System.out.println("Received message type not valid for robot.");
         }
@@ -91,4 +93,10 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
         // If Stop: force stop is on
     }
 
+    private void handleLocationRequestReply(ACLMessage message) {
+        JsonObject payload = Messages.toJson(message.getContent());
+        JsonObject jsonData = payload.getAsJsonObject("data");
+        Position destinationPos = new Position(jsonData.get("x").getAsFloat(), jsonData.get("y").getAsFloat());
+        RobotInformation.currentDestination = destinationPos;
+    }
 }

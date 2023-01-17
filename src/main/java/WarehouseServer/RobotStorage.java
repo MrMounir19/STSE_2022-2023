@@ -14,10 +14,10 @@ import java.util.ArrayList;
 public class RobotStorage {
     public static ArrayList<RobotObject> robots = new ArrayList<>();
 
-    public static void addRobot(String robotID) {
+    public static void addRobot(String robotID, String uwb_id) {
         // Adds the robot to the list
         System.out.println("Registered robot with id: " + robotID);
-        robots.add(new RobotObject(robotID));
+        robots.add(new RobotObject(robotID, uwb_id));
         System.out.println("Registered robots: " + robots);
     }
 

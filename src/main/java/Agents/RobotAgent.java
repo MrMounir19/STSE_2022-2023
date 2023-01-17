@@ -31,6 +31,5 @@ public class RobotAgent extends Agent {
         addBehaviour(tbf.wrap(robotmessageParserBehaviour));
         addBehaviour(tbf.wrap(uwbReceivingBehaviour));
         addBehaviour(tbf.wrap(generalRobotBehaviour));
-        //TODO: Add collision behaviour?
     }
 }
