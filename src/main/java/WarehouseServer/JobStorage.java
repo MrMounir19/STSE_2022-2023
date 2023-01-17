@@ -2,11 +2,11 @@ package WarehouseServer;
 
 import WarehouseShared.Job;
 
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
- * Util class to create messages of the system
+ * Util class to store to-do, in-progress, and finished jobs.
  *
  * @author Maxim
  * @author Thimoty
@@ -16,11 +16,63 @@ public class JobStorage {
     public static ArrayList<Job> toDoJobs = new ArrayList<>();
     public static ArrayList<Job> inProgressJobs = new ArrayList<>();
     public static ArrayList<Job> finishedJobs = new ArrayList<>();
+    private static int jobIdCounter = 0;
+
+    public static HashMap<RobotObject, ArrayList<Job>> robotJobs = new HashMap<>();
+
+    public static int getJobIdCounter() {
+        return jobIdCounter;
+    }
+
+    protected static void incrementJobIdCounter() {
+        jobIdCounter += 1;
+    }
 
     public static void addToDoJob(Job job) {
+        if (job.getId() == -1) {
+            job.setId(getJobIdCounter());
+            incrementJobIdCounter();
+        }
         System.out.println("Adding Job to Queue: " + job.toString());
         toDoJobs.add(job);
         System.out.println("Added a Job to the Queue: " + toDoJobs.get(toDoJobs.size() - 1).toString());
+    }
+
+    public static void registerRobotInRobotJobs(RobotObject robot) {
+        if(!robotJobs.containsKey(robot)) {
+            robotJobs.put(robot, new ArrayList<>());
+        }
+    }
+
+    public static void addJobToRobot(RobotObject robot, Job job){
+        registerRobotInRobotJobs(robot);
+        try{
+            robotJobs.get(robot).add(job);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removeJobFromRobot(RobotObject robot, Job job){
+        if(!robotJobs.containsKey(robot)){
+            throw new RuntimeException();
+        }
+
+        try{
+            robotJobs.get(robot).remove(job);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean checkRobotIdle(RobotObject robot) {
+        if(!robotJobs.containsKey(robot)) {
+            registerRobotInRobotJobs(robot);
+            return true;
+        }
+
+        return robotJobs.get(robot).isEmpty();
     }
 
     public static void addInProgressJob(Job job) {

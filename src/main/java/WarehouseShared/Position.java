@@ -19,4 +19,13 @@ public class Position {
     public float distanceTo(Position other) {
         return (float) Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+
+    public String toJsonArray() {
+        return "[" + x + "," + y + "]";
+    }
 }

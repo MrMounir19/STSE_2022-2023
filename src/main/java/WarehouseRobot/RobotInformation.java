@@ -1,5 +1,6 @@
 package WarehouseRobot;
 
+import Enums.ActivityState;
 import WarehouseShared.Job;
 import WarehouseShared.Position;
 
@@ -15,6 +16,10 @@ public class RobotInformation {
     public static Position position = new Position(0, 0);
     public static float yaw = 0;
     public static boolean isInitialized = false;
+
+    public static Position currentDestination;  // Can be the current job's pickup, the dropoff, a triage point, or a charging point.
+    public static Position jobStartPosition;    // Needs to be set when a new job is accepted.
+    public static ActivityState activityState = ActivityState.Idle; // Will change depending on current activity.
 
     public static ArrayList<Position> positionHistory = new ArrayList<>();
     public static ArrayList<Job> jobs = new ArrayList<>();
@@ -45,18 +50,31 @@ public class RobotInformation {
 
     public static void addJob(Job job) {
         jobs.add(job);
+        if (currentJob == null) {
+            takeJobFromQueue();
+        }
     }
 
     public static void takeJobFromQueue() {
-        currentJob = jobs.remove(0);
-        if (currentJob.currentGoal == null) {
-            currentJob.setCurrentGoal(currentJob.path.get(0));
-            System.out.println(RobotInformation.position.x + " " + RobotInformation.position.y);
-            currentJob.previousGoal = RobotInformation.position;
+        if (jobs.size() > 0) {
+            currentJob = jobs.remove(0);
+            jobStartPosition = position;    // TODO: Needs to be a copy?
+        }
+        else {
+            currentJob = null;
+            jobStartPosition = null;    // TODO: Safe to set this to null?
         }
     }
 
     public static Float getYaw() {
         return yaw;
+    }
+
+    public static Position getCurrentDestination() {
+        return currentDestination;
+    }
+
+    public static void setCurrentDestination(Position currentDestination) {
+        RobotInformation.currentDestination = currentDestination;
     }
 }

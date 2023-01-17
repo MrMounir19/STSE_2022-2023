@@ -19,6 +19,8 @@ public class Scheduler {
         }
 
         JobStorage.addInProgressJob(fetchedJob);
+
+        JobStorage.addJobToRobot(robot, fetchedJob);
         //Add job to RobotInformation/RobotObject?
 
         return fetchedJob;
@@ -33,10 +35,7 @@ public class Scheduler {
         }
         float nearestDistance = Float.MAX_VALUE;
         for (Job job : JobStorage.toDoJobs) {
-            if (job.getSourcePosition() == null) {
-                continue;
-            }
-            float distance = robotPosition.distanceTo(job.getSourcePosition());
+            float distance = robotPosition.distanceTo(job.getDestination());
             if (distance < nearestDistance) {
                 nearestJob = job;
                 nearestDistance = distance;
@@ -53,15 +52,12 @@ public class Scheduler {
     }
 
     public static void finishJob(RobotObject robot, Job job) {
-        // check if robot has any jobs at all
-//        if(robot.jobs.isEmpty()){
-//            System.out.println("No Jobs Available");
-//            return;
-//        }
-
         JobStorage.addFinishedJob(robot,job);
-
-        //Remove object from robot's joblist
+        JobStorage.removeJobFromRobot(robot,job);
     }
 
+    public static void failJob(RobotObject robot, Job job) {
+        JobStorage.failJob(robot,job);
+        JobStorage.removeJobFromRobot(robot,job);
+    }
 }

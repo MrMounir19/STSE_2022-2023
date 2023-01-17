@@ -7,5 +7,25 @@
   "main_port": "1099",
   "gui": true,
   "is_main": true,
-  "init_components": false
+  "init_components": false,
+  "collision_avoidance_distance": 30,
+
+  "triagingStation": [
+    [0, 0]
+  ],
+  "chargingStation": [
+    [1, 1]
+  ],
+  "dropOffStation": [
+    [2, 2]
+  ],
+
+  "positionLimits": {
+    "xmin": 0,
+    "xmax": 100,
+    "ymin": 0,
+    "ymax": 100
+  },
+
+  "useJobGenerator": true
 }

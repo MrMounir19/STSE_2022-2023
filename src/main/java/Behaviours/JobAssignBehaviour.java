@@ -6,7 +6,6 @@ import WarehouseServer.RobotStorage;
 import WarehouseServer.Scheduler;
 import WarehouseShared.Job;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
 
 /**
  *
@@ -16,19 +15,26 @@ import jade.lang.acl.ACLMessage;
  * @since 10/12/2022
  */
 public class JobAssignBehaviour extends OneShotBehaviour {
-    ACLMessage message;
+    String robotId;
 
-    JobAssignBehaviour(ACLMessage message) {
-        this.message = message;
+    JobAssignBehaviour(String robotId) {
+        this.robotId = robotId;
     }
 
     @Override
     public void action() {
-        RobotObject robot = RobotStorage.getFromACLMessage(message);
+        System.out.println("Attempting to assign job to " + robotId + ".");
+        RobotObject robot = RobotStorage.getFromID(robotId);
+
+        if (robot == null) {
+            System.out.println("Tried assigning job to " + robotId + ". But robot was not found in the system.");
+            return;
+        }
+
         Job job = Scheduler.requestJob(robot);
 
         if (job == null) {
-            System.out.println("Job is null");
+            System.out.println("Job is null. Could not assign job.");
             return;
         }
 

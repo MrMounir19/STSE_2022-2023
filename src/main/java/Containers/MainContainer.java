@@ -1,4 +1,12 @@
 package Containers;
+import WarehouseServer.LocationManager;
+import jade.core.Profile;
+import jade.util.ExtendedProperties;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+import java.net.InetAddress;
 
 /**
  * This is the main container class. It is responsible for creating the main container for our system.
@@ -17,5 +25,11 @@ public class MainContainer extends BaseContainer {
         MainContainer mainContainer = new MainContainer();
         mainContainer.setConfigFromPath("./configs/maincontainer.json");
         mainContainer.start();
+    }
+
+    @Override
+    protected void preAgents() {
+        super.preAgents();
+        LocationManager.createLocations();
     }
 }

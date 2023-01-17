@@ -4,6 +4,7 @@ import Utils.Messages;
 import WarehouseServer.JobStorage;
 import WarehouseServer.RobotObject;
 import WarehouseServer.RobotStorage;
+import WarehouseServer.Scheduler;
 import WarehouseShared.Job;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -30,6 +31,6 @@ public class JobFailedBehaviour extends OneShotBehaviour {
         int jobId = Messages.toJson(content).get("data").getAsInt();
         Job job = JobStorage.getFromId(jobId);
 
-        JobStorage.failJob(robot, job);
+        Scheduler.failJob(robot, job);
     }
 }
