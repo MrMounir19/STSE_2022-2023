@@ -1,5 +1,6 @@
 package Behaviours;
 
+import Enums.CollisionAction;
 import Enums.ActivityState;
 import Enums.LocationType;
 import Utils.Messages;
@@ -46,7 +47,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             RobotInformation.activityState = ActivityState.PickingUp;
         }
         // When the robot has a job
-        if (RobotInformation.currentDestination != null && RobotInformation.activityState != ActivityState.Idle) {
+        if (RobotInformation.currentDestination != null && RobotInformation.activityState != ActivityState.Idle && RobotInformation.collisionStatus != CollisionAction.Stop) {
             Delay.msDelay(150);
             // Get the position of the job goal
             Position targetpos = RobotInformation.currentDestination;
@@ -80,6 +81,10 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
 
             // ------------------ Go to goal ------------------
             while (!(RobotInformation.position.distanceTo(RobotInformation.currentDestination) < 100)) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
+                while (RobotInformation.collisionStatus == CollisionAction.Stop) {
+                    Delay.msDelay(100);
+
+                }
                 Delay.msDelay(100);
 
                 // Collision check

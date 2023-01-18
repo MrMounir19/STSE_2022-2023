@@ -1,5 +1,6 @@
 package WarehouseRobot;
 
+import Enums.CollisionAction;
 import Enums.ActivityState;
 import WarehouseShared.Job;
 import WarehouseShared.Position;
@@ -34,6 +35,8 @@ public class RobotInformation {
         return uwbID;
     }
 
+    public static CollisionAction collisionStatus = CollisionAction.Continue;
+
     public static void setRobotPosition(float x, float y, float orientation) {
         position = new Position(x, y);
         yaw = orientation;
@@ -67,6 +70,9 @@ public class RobotInformation {
         }
     }
 
+    public static void removeCurrentJob() {
+        currentJob = null;
+    }
     public static Float getYaw() {
         return yaw;
     }

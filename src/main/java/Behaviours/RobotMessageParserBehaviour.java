@@ -2,6 +2,7 @@ package Behaviours;
 
 import Enums.CollisionAction;
 import Enums.MessageType;
+import Enums.CollisionAction;
 import WarehouseShared.Job;
 import Utils.Messages;
 import WarehouseRobot.RobotInformation;
@@ -10,6 +11,7 @@ import com.google.gson.JsonObject;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -87,7 +89,7 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
 
         JsonObject payload = Messages.toJson(message.getContent());
         String collisionActionStr = payload.getAsJsonObject("data").getAsJsonObject("action").getAsString();
-        CollisionAction collisionAction = CollisionAction.valueOf(collisionActionStr);
+        RobotInformation.collisionStatus = CollisionAction.valueOf(collisionActionStr);
 
         // If Continue: force stop is off
         // If Stop: force stop is on
