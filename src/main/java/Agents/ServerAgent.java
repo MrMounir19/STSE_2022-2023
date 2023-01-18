@@ -1,5 +1,6 @@
 package Agents;
 
+import Behaviours.CollisionAvoidanceCheckBehaviour;
 import Behaviours.GeneralServerBehaviour;
 import Behaviours.JobGeneratorBehaviour;
 import Behaviours.ServerMessageParserBehaviour;
@@ -29,17 +30,30 @@ public class ServerAgent extends Agent {
         Behaviour serverMessageParserBehaviour = new ServerMessageParserBehaviour();
         Behaviour uwbReceivingBehaviour = new UWBReceivingBehaviour();
         Behaviour generalServerBehaviour = new GeneralServerBehaviour();
+        Behaviour collisionAvoidanceCheckBehaviour = new CollisionAvoidanceCheckBehaviour();
         addBehaviour(tbf.wrap(serverMessageParserBehaviour));
         addBehaviour(tbf.wrap(uwbReceivingBehaviour));
         addBehaviour(tbf.wrap(generalServerBehaviour));
+        addBehaviour(tbf.wrap(collisionAvoidanceCheckBehaviour));
 
         if (Config.getConfig().get("useJobGenerator").getAsBoolean()) {
             Behaviour jobGeneratorBehaviour = new JobGeneratorBehaviour();
             addBehaviour(tbf.wrap(jobGeneratorBehaviour));
         } else {
+//            Job newJob = new Job();
+//            newJob.setDestination(new Position(7170, 16270));
+//            JobStorage.addToDoJob(newJob);
+
+
             Job newJob = new Job();
-            newJob.setDestination(new Position(7170, 16270));
+            newJob.setDestination(new Position(7660, 15810));
             JobStorage.addToDoJob(newJob);
+
+            Job newJob2 = new Job();
+            newJob2.setDestination(new Position(8825, 15765));
+            JobStorage.addToDoJob(newJob2);
+
+
         }
     }
 }

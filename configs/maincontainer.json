@@ -8,7 +8,7 @@
   "gui": true,
   "is_main": true,
   "init_components": false,
-  "collision_avoidance_distance": 30,
+  "collision_avoidance_distance": 600,
 
   "triagingStation": [
     [0, 0]

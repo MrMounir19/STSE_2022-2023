@@ -28,13 +28,7 @@ public class MotorControl {
      * @param speed speed to apply to both motors.
      */
     private static void applyToBoth(int speed) {
-        try {
-            int lspeed = invertControls * speed * leftWheelModifier;
-            RobComponents.motorL.setSpeed(lspeed);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RobComponents.motorL.setSpeed((int) invertControls * speed * leftWheelModifier);
         RobComponents.motorR.setSpeed((int) invertControls * speed * rightWheelModifier);
         Delay.msDelay(controlDelayMs);
     }
@@ -53,6 +47,7 @@ public class MotorControl {
      */
     public static void turnLeftInPlace() {
         applyToBoth(speed);
+        System.out.println(speed);
         RobComponents.motorL.backward();
         RobComponents.motorR.forward();
         Delay.msDelay(controlDelayMs);
@@ -63,6 +58,7 @@ public class MotorControl {
      */
     public static void turnRightInPlace() {
         applyToBoth(speed);
+        System.out.println(speed);
         RobComponents.motorL.forward();
         RobComponents.motorR.backward();
         Delay.msDelay(controlDelayMs);

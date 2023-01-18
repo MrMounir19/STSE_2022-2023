@@ -2,11 +2,14 @@ package Behaviours;
 
 import Enums.CollisionAction;
 import Utils.Messages;
+import WarehouseRobot.RobotInformation;
 import WarehouseServer.RobotObject;
 import WarehouseServer.RobotStorage;
 import WarehouseShared.Config;
 import WarehouseShared.Position;
 import jade.core.behaviours.CyclicBehaviour;
+import lejos.utility.Delay;
+
 import java.util.ArrayList;
 
 
@@ -51,19 +54,23 @@ public class CollisionAvoidanceCheckBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
+        // TODO uwb tag not central
         for (RobotObject robot1 : RobotStorage.getRobots()) {
             for (RobotObject robot2 : RobotStorage.getRobots()) {
-                if (alreadyColliding(robot1, robot2)) {
-                    if (!collisionCheck(robot1, robot2)) {
-                        endCollisionAvoidance(robot1, robot2);
+                if (robot1 != robot2) {
+                    if (alreadyColliding(robot1, robot2)) {
+                        if (!collisionCheck(robot1, robot2)) {
+                            System.out.println("EndCollisionAvoidance");
+                            endCollisionAvoidance(robot1, robot2);
+                        }
+                    } else if (collisionCheck(robot1, robot2)) {
+                        System.out.println("StartCollisionAvoidance");
+                        startCollisionAvoidance(robot1, robot2);
                     }
-                }
-
-                if (collisionCheck(robot1, robot2)) {
-                    startCollisionAvoidance(robot1, robot2);
                 }
             }
         }
+        Delay.msDelay(100);
     }
 
     /**
@@ -80,10 +87,14 @@ public class CollisionAvoidanceCheckBehaviour extends CyclicBehaviour {
     public boolean collisionCheck(RobotObject robot1, RobotObject robot2) {
         Position robot1Position = robot1.position;
         Position robot2Position = robot2.position;
-
+        System.out.println("r1 pos "+ robot1Position);
+        System.out.println("r2 pos "+ robot2Position);
         float collisionAvoidanceDistance = Config.getConfig().get("collision_avoidance_distance").getAsFloat();
-
-        return robot1Position.distanceTo(robot2Position) < collisionAvoidanceDistance;
+        if ( robot1Position == null || robot2Position == null) {
+            return false;
+        }
+        System.out.println("Distance between " + robot1Position.distanceTo(robot2Position));
+        return robot1Position.distanceTo(robot2Position) < 600;
     }
 
     private boolean alreadyColliding(RobotObject robot1, RobotObject robot2) {

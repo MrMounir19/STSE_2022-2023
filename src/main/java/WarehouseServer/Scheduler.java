@@ -36,7 +36,8 @@ public class Scheduler {
         float nearestDistance = Float.MAX_VALUE;
         for (Job job : JobStorage.toDoJobs) {
             float distance = robotPosition.distanceTo(job.getDestination());
-            if (distance < nearestDistance) {
+            // TODO is now furthest job
+            if (distance > nearestDistance) {
                 nearestJob = job;
                 nearestDistance = distance;
             }

@@ -86,10 +86,11 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
     private void handleCollisionMessage(ACLMessage message) {
         // TODO
         // Will need a state of some kind that can be toggled to force the robot to stop. @Anthony @Senne
-
         JsonObject payload = Messages.toJson(message.getContent());
-        String collisionActionStr = payload.getAsJsonObject("data").getAsJsonObject("action").getAsString();
+        String collisionActionStr = payload.getAsJsonObject("data").get("action").getAsString();
+        System.out.println(collisionActionStr);
         RobotInformation.collisionStatus = CollisionAction.valueOf(collisionActionStr);
+        System.out.println("HANDLING COLLISION    " + RobotInformation.collisionStatus);
 
         // If Continue: force stop is off
         // If Stop: force stop is on

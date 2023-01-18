@@ -30,11 +30,11 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         if (!RobotInformation.isInitialized) {
             initializeRobot();
         }
-        if (RobotInformation.jobs.size() == 0) {
-            myAgent.send(Messages.requestJobMessage());
-            // Potentially request multiple?
-            block(1000);
-        }
+//        if (RobotInformation.jobs.size() == 0) {
+//            myAgent.send(Messages.requestJobMessage());
+//            // Potentially request multiple?
+//            block(1000);
+//        }
         // If the robot does not have a job, take one from the queue
         if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
             System.out.println("Taking first job");
@@ -53,7 +53,9 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             Position targetpos = RobotInformation.currentDestination;
             System.out.println("goal x: " + targetpos.x +" | goal y: " + targetpos.y);
             Position p = getAccuratePosition();
-
+            System.out.println("accurate start x:" + p.x + " | y: " + p.y);
+            System.out.println("calculate rotation");
+            Delay.msDelay(5000);
             // Calculate the angle to the target position
             float yaw = (float) Math.toDegrees(RobotInformation.yaw);
             float target_angle = (float) Math.toDegrees(Math.atan2(targetpos.y - p.y, targetpos.x - p.x));
@@ -62,6 +64,12 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
 
             // initial rotation to the direction of our first target on the path
             while (Math.abs(diff_angle) >= 1) {
+                while (RobotInformation.collisionStatus == CollisionAction.Stop) {
+                    Delay.msDelay(100);
+                    System.out.println("Waiting for continue");
+                    MotorControl.stopMotors();
+
+                }
                 //TODO set left or right if angles are closer
                 Delay.msDelay(100);
                 MotorControl.setSpeed(70);  // between slow and medium, speed
@@ -80,10 +88,11 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
             }
 
             // ------------------ Go to goal ------------------
-            while (!(RobotInformation.position.distanceTo(RobotInformation.currentDestination) < 100)) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
+            while (true) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
                 while (RobotInformation.collisionStatus == CollisionAction.Stop) {
                     Delay.msDelay(100);
-
+                    System.out.println("Waiting for continue");
+                    MotorControl.stopMotors();
                 }
                 Delay.msDelay(100);
 
