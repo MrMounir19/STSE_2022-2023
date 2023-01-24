@@ -33,37 +33,38 @@ public class LocationManager {
             }
 
             switch(location) {
-                case triagingStations:
+                case triagingStation:
                     triagingStations = positions;
                     break;
-                case chargingStations:
+                case chargingStation:
                     chargingStations = positions;
                     break;
-                case dropOffStations:
+                case dropOffStation:
                     dropOffStations = positions;
                     break;
             }
+
         } catch (Exception e){
             throw new RuntimeException(e);
         }
     }
 
    public static void createLocations() {
-        createLocation(LocationType.triagingStations);
-        createLocation(LocationType.chargingStations);
-        createLocation(LocationType.dropOffStations);
+        createLocation(LocationType.triagingStation);
+        createLocation(LocationType.chargingStation);
+        createLocation(LocationType.dropOffStation);
    }
 
    public static Position getNearestLocation(Position pos, LocationType location) {
         ArrayList<Position> locationArray = null;
        switch(location){
-           case triagingStations:
+           case triagingStation:
                locationArray = triagingStations;
                break;
-           case chargingStations:
+           case chargingStation:
                locationArray = chargingStations;
                break;
-           case dropOffStations:
+           case dropOffStation:
                locationArray = dropOffStations;
                break;
        }

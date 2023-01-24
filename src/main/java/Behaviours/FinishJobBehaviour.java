@@ -2,12 +2,8 @@ package Behaviours;
 
 import Utils.Messages;
 import WarehouseRobot.RobotInformation;
-import WarehouseServer.RobotObject;
-import WarehouseServer.RobotStorage;
-import WarehouseServer.Scheduler;
 import WarehouseShared.Job;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
 
 /**
  *
@@ -26,6 +22,10 @@ public class FinishJobBehaviour extends OneShotBehaviour {
             return;
         }
 
+        System.out.println("Finishing job: " + job);
+
         myAgent.send(Messages.finishedJobMessage(job));
+
+        RobotInformation.takeJobFromQueue(); //TODO: Should we do this here?
     }
 }

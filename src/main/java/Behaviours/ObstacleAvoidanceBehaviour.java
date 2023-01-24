@@ -71,11 +71,11 @@ public class ObstacleAvoidanceBehaviour extends OneShotBehaviour {
 
             //Check if back on path
             //calculate distance of current position to line
-            int x1 = (int) RobotInformation.currentJob.previousGoal.x;
-            int y1 = (int) RobotInformation.currentJob.previousGoal.y;
+            int x1 = (int) RobotInformation.jobStartPosition.x;
+            int y1 = (int) RobotInformation.jobStartPosition.y;
 
-            int x2 = (int) RobotInformation.currentJob.currentGoal.x;
-            int y2 = (int) RobotInformation.currentJob.currentGoal.y;
+            int x2 = (int) RobotInformation.currentJob.getDestination().x;
+            int y2 = (int) RobotInformation.currentJob.getDestination().y;
 
             int x0 = (int) RobotInformation.position.x;
             int y0 = (int) RobotInformation.position.y;

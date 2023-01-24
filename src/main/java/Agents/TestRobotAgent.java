@@ -1,11 +1,11 @@
 package Agents;
 
 import Behaviours.*;
+import WarehouseRobot.RobotInformation;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
-import lejos.utility.Delay;
 
 /**
  * This agent is used for the testing.
@@ -23,26 +23,18 @@ public class TestRobotAgent extends Agent {
     protected void setup() {
         Behaviour registrationBehaviour = new RegistrationBehaviour();
         Behaviour robotmessageParserBehaviour = new RobotMessageParserBehaviour();
-        Behaviour requestJob = new OneShotBehaviour() {
+        Behaviour finishJob = new CyclicBehaviour() {
             @Override
             public void action() {
-                Delay.msDelay(5000);
-                System.out.println("Requesting job!");
-                addBehaviour(new RequestJobBehaviour());
-            }
-        };
-        Behaviour finishJob = new OneShotBehaviour() {
-            @Override
-            public void action() {
-                Delay.msDelay(10000);
-                System.out.println("Finishing job!");
-                addBehaviour(new FinishJobBehaviour());
+                if (RobotInformation.currentJob != null) {
+                    addBehaviour(new FinishJobBehaviour());
+                }
+                block(100);
             }
         };
 
         addBehaviour(tbf.wrap(registrationBehaviour));
         addBehaviour(tbf.wrap(robotmessageParserBehaviour));
-        addBehaviour(tbf.wrap(requestJob));
         addBehaviour(tbf.wrap(finishJob));
     }
 }

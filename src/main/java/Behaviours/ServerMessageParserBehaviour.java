@@ -19,7 +19,7 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
     @Override
     public void action() {
         ACLMessage message = myAgent.receive();
-        if (message != null) {
+        if (message != null && message.getPerformative() == ACLMessage.INFORM) {
             handleMessage(message);
         }
         block();
@@ -31,8 +31,12 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
         String content = message.getContent();
         JsonObject payload;
 
-        // TODO: Catch MalformedJsonException (Can occur when receiving error message (for example when sending message to container/agent that no longer exists))
-        payload = Messages.toJson(content);
+        try {
+            payload = Messages.toJson(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
 
         MessageType messageType = MessageType.valueOf(payload.get("messageType").getAsString());
 
@@ -46,9 +50,16 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
             handleJobFailedMessage(message);
         } else if (messageType == MessageType.JobRequest) {
             handleJobRequestMessage(message);
+        } else if (messageType == MessageType.LocationRequest){
+            handleLocationRequestMessage(message);
         } else {
             System.out.println("Received message type not valid for server.");
         }
+    }
+
+    private void handleLocationRequestMessage(ACLMessage message){
+
+        myAgent.addBehaviour( new LocationRequestReplyBehaviour(message));
     }
 
     private void handleRegistrationMessage(ACLMessage message) {
