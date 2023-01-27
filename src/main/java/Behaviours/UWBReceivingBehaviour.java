@@ -2,7 +2,6 @@ package Behaviours;
 
 import WarehouseRobot.RobotInformation;
 import WarehouseServer.RobotStorage;
-import WarehouseShared.Position;
 import jade.core.behaviours.CyclicBehaviour;
 import org.eclipse.paho.client.mqttv3.*;
 
@@ -47,15 +46,7 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                             JsonObject data = robot.getAsJsonObject("data");
                             JsonObject coordinates = data.getAsJsonObject("coordinates");
                             JsonObject orientation = data.getAsJsonObject("orientation");
-//                            if (robot.get("tagId").getAsString().equals("26689")) {
-//                                System.out.println(orientation.get("yaw").getAsString());
-//                                RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
-//                                System.out.println(RobotInformation.getYaw());
-//                                Position pos = RobotInformation.position;
-//                                float yaw = (float) Math.toDegrees(RobotInformation.yaw);
-//                                System.out.println("yaw");
-//                                System.out.println(yaw);
-//                            }
+
                             //Master tag
                             if (robot.get("tagId").getAsString().equals("26702")) {
                                 RobotInformation.setMasterPosition(coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat());
@@ -63,9 +54,8 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                             if (myAgent.getAID().getLocalName().contains("ServerAgent")) {
                                 RobotStorage.updateRobotPosition(robot.get("tagId").getAsString(), coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                             } else {
-                                //TODO not hardcoded
-                                if (robot.get("tagId").getAsString().equals("26689")) {
-                                    RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
+                                if (robot.get("tagId").getAsString().equals(RobotInformation.getUwbID())) {
+                                        RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
                                 }
                             }
                         }
@@ -80,12 +70,13 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
             mqttClient.subscribe(topic);
 //            System.out.println("Subscribed to topic: "+topic);
         } catch(MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
-            System.out.println("msg "+me.getMessage());
-            System.out.println("loc "+me.getLocalizedMessage());
-            System.out.println("cause "+me.getCause());
-            System.out.println("excep "+me);
-            me.printStackTrace();
+//            System.out.println("reason "+me.getReasonCode());
+//            System.out.println("msg "+me.getMessage());
+//            System.out.println("loc "+me.getLocalizedMessage());
+//            System.out.println("cause "+me.getCause());
+//            System.out.println("excep "+me);
+//            me.printStackTrace();
+            System.out.println("uwb error");
         }
 
     }

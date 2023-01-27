@@ -3,6 +3,7 @@ package Utils;
 import Enums.CollisionAction;
 import Enums.LocationType;
 import Enums.MessageType;
+import WarehouseRobot.RobotInformation;
 import WarehouseShared.Job;
 import WarehouseShared.Position;
 import com.google.gson.JsonObject;
@@ -37,7 +38,7 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(serverAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': '" + MessageType.Registration + "'}";
+        String payload = "{'messageType': '" + MessageType.Registration + "', 'data' : {'uwb_id': '" + RobotInformation.uwbID + "'}}";
 
         message.setContent(payload);
 
@@ -90,7 +91,7 @@ public class Messages {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
 
-        String payload = "{'messageType': '" + MessageType.LocationRequest + "', 'data': {'position': " + locationPosition.toJsonArray() + "}}";
+        String payload = "{'messageType': '" + MessageType.LocationRequest + "', 'data': {'x': " + locationPosition.x + ", 'y':"+ locationPosition.y +"}}";
 
         message.setContent(payload);
 

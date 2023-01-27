@@ -39,7 +39,7 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
         }
 
         MessageType messageType = MessageType.valueOf(payload.get("messageType").getAsString());
-
+        System.out.println("received message ---------- " + messageType);
         if (messageType == MessageType.Registration) {
             handleRegistrationMessage(message);
         } else if (messageType == MessageType.Collision) {
@@ -58,7 +58,7 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
     }
 
     private void handleLocationRequestMessage(ACLMessage message){
-
+        System.out.println("Request location");
         myAgent.addBehaviour( new LocationRequestReplyBehaviour(message));
     }
 

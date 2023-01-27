@@ -1,8 +1,8 @@
 package Containers;
 
+
 import WarehouseRobot.RobComponents;
-import jade.core.Profile;
-import jade.util.ExtendedProperties;
+import WarehouseRobot.RobotInformation;
 
 /**
  * This is a simple container class. It creates a container for a single agent, to be deployed on a single machine.
@@ -30,6 +30,7 @@ public class RobotContainer extends BaseContainer {
     protected void createAgents() {
         RobComponents.init();
         super.createAgents();
+        RobotInformation.uwbID = config.get("uwb_id").getAsString();
     }
 
     @Override

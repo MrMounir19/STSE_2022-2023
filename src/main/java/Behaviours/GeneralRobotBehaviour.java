@@ -1,5 +1,8 @@
 package Behaviours;
 
+import Enums.CollisionAction;
+import Enums.ActivityState;
+import Enums.LocationType;
 import Utils.Messages;
 import WarehouseRobot.RobotInformation;
 import WarehouseRobot.SensorControl;
@@ -7,7 +10,8 @@ import WarehouseShared.Position;
 import jade.core.behaviours.CyclicBehaviour;
 import WarehouseRobot.MotorControl;
 import lejos.utility.Delay;
-import java.util.ArrayList;
+
+import java.awt.*;
 
 /**
  * Handles the reoccurring standard behaviours of our physical robot.
@@ -26,25 +30,32 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         if (!RobotInformation.isInitialized) {
             initializeRobot();
         }
-        if (RobotInformation.jobs.size() == 0) {
-            myAgent.send(Messages.requestJobMessage());
-            // TODO: Block for X ms to receive & store job(s)?
-            // Potentially request multiple?
-        }
+//        if (RobotInformation.jobs.size() == 0) {
+//            myAgent.send(Messages.requestJobMessage());
+//            // Potentially request multiple?
+//            block(1000);
+//        }
         // If the robot does not have a job, take one from the queue
         if (RobotInformation.currentJob == null && RobotInformation.jobs.size() > 0) {
             System.out.println("Taking first job");
+            int delay = 0;
+            while ((int)RobotInformation.position.x == 0 && (int)RobotInformation.position.y == 0 && delay < 10) {
+                delay += 1;
+                Delay.msDelay(300);
+            }
             RobotInformation.takeJobFromQueue();
-            //RobotInformation.currentJob.advanceGoal();  // to get the first goal from the new job
+            RobotInformation.activityState = ActivityState.PickingUp;
         }
         // When the robot has a job
-        if (RobotInformation.currentJob != null) {
+        if (RobotInformation.currentDestination != null && RobotInformation.activityState != ActivityState.Idle && RobotInformation.collisionStatus != CollisionAction.Stop) {
             Delay.msDelay(150);
             // Get the position of the job goal
-            Position targetpos = RobotInformation.currentJob.getDestination();
+            Position targetpos = RobotInformation.currentDestination;
             System.out.println("goal x: " + targetpos.x +" | goal y: " + targetpos.y);
-            Position p = RobotInformation.position;
-
+            Position p = getAccuratePosition();
+            System.out.println("accurate start x:" + p.x + " | y: " + p.y);
+            System.out.println("calculate rotation");
+            Delay.msDelay(5000);
             // Calculate the angle to the target position
             float yaw = (float) Math.toDegrees(RobotInformation.yaw);
             float target_angle = (float) Math.toDegrees(Math.atan2(targetpos.y - p.y, targetpos.x - p.x));
@@ -53,9 +64,15 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
 
             // initial rotation to the direction of our first target on the path
             while (Math.abs(diff_angle) >= 1) {
+                while (RobotInformation.collisionStatus == CollisionAction.Stop) {
+                    Delay.msDelay(100);
+                    System.out.println("Waiting for continue");
+                    MotorControl.stopMotors();
+
+                }
                 //TODO set left or right if angles are closer
                 Delay.msDelay(100);
-                MotorControl.setSpeed(MotorControl.fastSpeed);
+                MotorControl.setSpeed(70);  // between slow and medium, speed
                 // If negative angle -> turn left
                 // if positive angle -> turn right
                 if (diff_angle < 0) {
@@ -67,11 +84,16 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
 
                 yaw = (float) Math.toDegrees(RobotInformation.yaw);
                 diff_angle = correctAngle(target_angle - yaw);
-                System.out.println(diff_angle);
+                System.out.println("Angle: " + diff_angle);
             }
 
             // ------------------ Go to goal ------------------
-            while (!(RobotInformation.position.distanceTo(RobotInformation.currentJob.getDestination()) < 100)) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
+            while (true) {   // TODO: Check if this makes sense; Was changed since goals are no longer a thing.
+                while (RobotInformation.collisionStatus == CollisionAction.Stop) {
+                    Delay.msDelay(100);
+                    System.out.println("Waiting for continue");
+                    MotorControl.stopMotors();
+                }
                 Delay.msDelay(100);
 
                 // Collision check
@@ -87,45 +109,57 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 }
 
                 // Move forward
+                MotorControl.setSpeed(MotorControl.mediumSpeed);
                 MotorControl.moveForward();
                 yaw = (float) Math.toDegrees(RobotInformation.yaw);
                 diff_angle = correctAngle(target_angle - yaw);
 
                 // Forward with slight rotation if we deviate
-                int diff_angle_margin = 2;
-                int diff_angle_div_margin = 180 - 10;   // a margin of 10 on the standard 180-degree angle
-                if (diff_angle > diff_angle_margin) {
-                    System.out.println("correcting");
-                    MotorControl.moveForwardPrecise(MotorControl.fastSpeed, 1, 1 + diff_angle / diff_angle_div_margin);
-                } else if (diff_angle < - diff_angle_margin) {
-                    System.out.println("correcting");
-                    MotorControl.moveForwardPrecise(MotorControl.fastSpeed, 1 + diff_angle / diff_angle_div_margin, 1);
+                int diff_angle_margin = 3;
+                int diff_angle_div_margin = 180 - 100;   // a margin of 10 on the standard 180-degree angle
+                System.out.println("diff_angle: " + diff_angle);
+                if (diff_angle < -diff_angle_margin) {
+                    System.out.println("-----------------------------------correcting LEFT");
+                    MotorControl.moveForwardPrecise(MotorControl.mediumSpeed, 1, 1 + (Math.abs(diff_angle) / diff_angle_div_margin));
+                } else if (diff_angle > diff_angle_margin) {
+                    System.out.println("-----------------------------------correcting RIGHT");
+                    MotorControl.moveForwardPrecise(MotorControl.mediumSpeed, 1 + (Math.abs(diff_angle) / diff_angle_div_margin),1);
                 } else {
                     MotorControl.moveForward();
                 }
                 //TODO smoothen this since the location can jitter
                 System.out.println("X dist: " + Math.abs(RobotInformation.position.x - targetpos.x) + " | y dist: " + Math.abs(RobotInformation.position.y - targetpos.y));
-                System.out.println("x pos: " + RobotInformation.position.x + " | ypos: " + RobotInformation.position.y);
+                System.out.println("x pos: " + RobotInformation.position.x + " | y pos: " + RobotInformation.position.y);
                 System.out.println("target x pos: " + targetpos.x + " | targetypos: " + targetpos.y);
 
-                if (Math.abs(RobotInformation.position.x - targetpos.x) < 200 && Math.abs(RobotInformation.position.y - targetpos.y) < 200) {
+                if (Math.abs(RobotInformation.position.x - targetpos.x) < 300 && Math.abs(RobotInformation.position.y - targetpos.y) < 300) {
                     MotorControl.setSpeed(MotorControl.mediumSpeed);
-                    if (Math.abs(RobotInformation.position.x - targetpos.x) < 100 && Math.abs(RobotInformation.position.y - targetpos.y) < 100) {
+                    if (Math.abs(RobotInformation.position.x - targetpos.x) < 200 && Math.abs(RobotInformation.position.y - targetpos.y) < 200) {
                         System.out.println("X dist: " + Math.abs(RobotInformation.position.x - targetpos.x) + " | y dist: " + Math.abs(RobotInformation.position.x - targetpos.y));
                         // Tell system to move on to the next goal
-                        System.out.println("reach goal");
+                        System.out.println("reached goal");
                         MotorControl.stopMotors();
                         Delay.msDelay(1000);
-//                        RobotInformation.currentJob.advanceGoal();
-                        // TODO: This is no longer required ^
+                        RobotInformation.currentDestination = null;
+                        if (RobotInformation.activityState == ActivityState.PickingUp) {
+                            System.out.println("request dropoff");
+                            myAgent.send(Messages.locationRequestMessage(LocationType.dropOffStation));
+                            Delay.msDelay(5000);
+                            System.out.println("message sent");
+                            RobotInformation.activityState = ActivityState.DroppingOff;
+                        } else {
+                            System.out.println("finish job");
+                            RobotInformation.activityState = ActivityState.Idle;
+                            myAgent.send(Messages.finishedJobMessage(RobotInformation.currentJob));
+                            Delay.msDelay(5000);
+                            RobotInformation.currentJob = null;
+                        }
                         break;
                     }
                 } else {
-                    MotorControl.setSpeed(MotorControl.fastSpeed);
+                    MotorControl.setSpeed(MotorControl.mediumSpeed);
                 }
             }
-            // TODO: Send finish (or failure) job message and remove current job.
-            // See Maxim & Thimoty branch for these messages.
         }
     }
 
@@ -133,6 +167,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
      * Fix for first time orientation:
      * Wait for 3000 ms, and take average of coordinates over this time.
      * This is necessary because the POZYX system is not entirely accurate.
+     * TODO: DEPRECATED
      *
      * @author Anthony
      * @author Senne
@@ -140,17 +175,31 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
      */
     private void initializeRobot(){
         System.out.println("Init");
-        RobotInformation.clearHistory();
-        Delay.msDelay(3000);
+        RobotInformation.isInitialized = true;
+    }
+
+    /**
+     * Take average of last 5 positions to calculate accurate position.
+     * This is necessary because the POZYX system is not entirely accurate.
+     *
+     * @author Anthony
+     * @author Senne
+     * @since 19/12/2022
+     */
+    private Position getAccuratePosition() {
+        RobotInformation.clearHistory();    // TODO: Don't wipe, but just fetch last 5 positions?
+        while (RobotInformation.positionHistory.size() < 10) {
+            Delay.msDelay(100);
+        }
         Position p = new Position(0, 0);
-        ArrayList<Position> historyCopy = RobotInformation.positionHistory;
-        for (Position temppos : historyCopy) {
+        for (Position temppos : RobotInformation.positionHistory) {
             p.x += temppos.x;
             p.y += temppos.y;
         }
-        p.x /= historyCopy.size();
-        p.y /= historyCopy.size();
-        RobotInformation.isInitialized = true;
+        p.x /= RobotInformation.positionHistory.size();
+        p.y /= RobotInformation.positionHistory.size();
+
+        return p;
     }
 
     /**
@@ -183,8 +232,25 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         MotorControl.stopMotors();
         // We set the robot's speed to 100, which should be fairly slow allowing for a controlled manoeuvre.
         MotorControl.setSpeed(MotorControl.mediumSpeed);
-        // We start turning the robot to the right, allowing the left sensor to detect the object.
+
+
+        // Start by turning 90 degrees
+        int SensorDistanceTolerance = 3;
+        double start_yaw0 = Math.toDegrees(RobotInformation.getYaw());
+        double goal_yaw0 = (start_yaw0 + 90) % 360;
+        double current_yaw0 = Math.toDegrees(RobotInformation.getYaw());
         MotorControl.turnRightInPlace();
+        while (Math.abs(current_yaw0 - goal_yaw0) >= SensorDistanceTolerance) {
+            current_yaw0 = Math.toDegrees(RobotInformation.getYaw());
+            Delay.msDelay(100);
+        }
+        // Then measure left sensor
+        int leftSensorDistance = SensorControl.getLeftSensorDistance();
+        MotorControl.moveForward();
+        Delay.msDelay(1000);
+
+        // We start turning the robot to the right, allowing the left sensor to detect the object.
+       /* MotorControl.turnRightInPlace();
         // While we haven't yet detected an object with the left sensor, we keep turning.
         System.out.println("Initiating turn check.");
         int SensorDistanceTolerance = 3;
@@ -202,9 +268,10 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 System.out.println("Turning for too long");
                 break;
             }
-        }
+        }*/
         // If we get here, the avaoidance turn is complete
-        System.out.println("Avoidance turn complete.");
+        forward_distance = leftSensorDistance;
+        System.out.println("Avoidance turn complete at distance " + leftSensorDistance);
 
         // We stop the robot.
         Delay.msDelay(100);
@@ -215,15 +282,43 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         boolean didTurn = false;
         System.out.println("Start loop");
         int attempts_count = 0; // countsturn how many times we have tried to avoid obstacle
+        int left_distance_to_large = 0;
         while (true) {
             Delay.msDelay(100);
-            int frontSens = SensorControl.getFrontSensorDistance();SensorControl.getLeftSensorDistance();
-            int leftSens = Math.min(SensorControl.getLeftSensorDistance(), 100);
+            if (2 <= attempts_count) {
+                break;
+            }
+            int frontSens = SensorControl.getFrontSensorDistance();
+            int leftSens = Math.min(SensorControl.getLeftSensorDistance(), 60);
             System.out.println("frontSens: " + frontSens + "--- leftSens: " + leftSens);
             if (frontSens > 0 && frontSens <= forward_distance - 5) {
                 handleCollision();
             }
-            if (leftSens > (forward_distance + SensorDistanceTolerance) && !didTurn) {
+            if (leftSens > 30) {
+                // break
+                System.out.println("Start corner avoidance");
+                MotorControl.moveForward();
+                Delay.msDelay(4500);
+                double start_yaw = Math.toDegrees(RobotInformation.getYaw());
+                double goal_yaw = (start_yaw - 90) % 360;
+                double current_yaw = Math.toDegrees(RobotInformation.getYaw());
+                System.out.println("Start: " + start_yaw + " current: " + current_yaw);
+                System.out.println("goal: " + goal_yaw);
+                System.out.println(Math.abs(current_yaw - goal_yaw));
+                MotorControl.turnLeftInPlace();
+                while (Math.abs(current_yaw - goal_yaw) >= 4) {
+                    current_yaw = Math.toDegrees(RobotInformation.getYaw());
+                    Delay.msDelay(100);
+                }
+                MotorControl.moveForward();
+                Delay.msDelay(4500);
+                attempts_count += 1;
+                System.out.println("AttemptCounts add");
+
+            }
+            MotorControl.moveForward();
+
+            /*if (leftSens > (forward_distance + SensorDistanceTolerance) && !didTurn) {
                 didTurn = true;
                 System.out.println("turnLeftCollision");
                 MotorControl.turnLeftInPlace();
@@ -237,7 +332,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 attempts_count += 1;
                 didTurn = false;
                 Delay.msDelay(200);
-            }
+            }*/
 
             // If we have tried to avoid enough times
 /*            if(attempts_count > 25){
@@ -257,3 +352,5 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
         }
     }
 }
+
+
