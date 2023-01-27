@@ -41,8 +41,6 @@ public class LocationManager {
                     break;
                 case dropOffStation:
                     dropOffStations = positions;
-                    System.out.println("DROPOFF STATIONS ----------");
-                    System.out.println(dropOffStations);
                     break;
             }
 
@@ -74,20 +72,14 @@ public class LocationManager {
 
             Position nearestLocation = null;
             float nearestDistance = Float.MAX_VALUE;
-            System.out.println(nearestDistance);
-            System.out.println(locationArray);
-            System.out.println(location);
+
             for (Position loc : locationArray) {
-                System.out.println(pos);
-                System.out.println(loc);
                 float distance = (float) Math.sqrt(Math.pow(pos.x - loc.x, 2) + Math.pow(pos.y - loc.y, 2));
-                System.out.println(distance);
                 if (distance < nearestDistance) {
                     nearestDistance = distance;
                     nearestLocation = loc;
                 }
             }
-            System.out.println(nearestLocation);
             if (nearestLocation == null) {
                 if (chargingStations.size() > 0) {
                     nearestLocation = chargingStations.get(0);

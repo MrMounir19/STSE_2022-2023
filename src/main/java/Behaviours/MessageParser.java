@@ -12,11 +12,9 @@ public class MessageParser extends CyclicBehaviour {
             System.out.println("Motor agent: " + message.getContent());
 
             if (message.getContent().equals("Forward")) {
-                System.out.println("Forward movement");
                 MotorControl.moveForward();
             }
             if (message.getContent().equals("Left")) {
-                System.out.println("Left movement");
                 MotorControl.stopMotors();
                 MotorControl.turnLeftInPlace();
                 MotorControl.stopMotors();

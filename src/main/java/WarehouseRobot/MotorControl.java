@@ -47,7 +47,6 @@ public class MotorControl {
      */
     public static void turnLeftInPlace() {
         applyToBoth(speed);
-        System.out.println(speed);
         RobComponents.motorL.backward();
         RobComponents.motorR.forward();
         Delay.msDelay(controlDelayMs);
@@ -58,7 +57,6 @@ public class MotorControl {
      */
     public static void turnRightInPlace() {
         applyToBoth(speed);
-        System.out.println(speed);
         RobComponents.motorL.forward();
         RobComponents.motorR.backward();
         Delay.msDelay(controlDelayMs);

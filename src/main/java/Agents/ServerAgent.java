@@ -39,33 +39,6 @@ public class ServerAgent extends Agent {
         if (Config.getConfig().get("useJobGenerator").getAsBoolean()) {
             Behaviour jobGeneratorBehaviour = new JobGeneratorBehaviour();
             addBehaviour(tbf.wrap(jobGeneratorBehaviour));
-        } else {
-//            Job newJob = new Job();
-//            newJob.setDestination(new Position(7170, 16270));
-//            JobStorage.addToDoJob(newJob);
-
-
-//            Job newJob = new Job();
-//            newJob.setDestination(new Position(12246, 15204));
-//            JobStorage.addToDoJob(newJob);
-//
-//            Job newJob2 = new Job();
-//            newJob2.setDestination(new Position(15047, 13681));
-//            JobStorage.addToDoJob(newJob2);
-
-
-            Job newJob = new Job();
-            newJob.setDestination(new Position(13890, 14590));
-            JobStorage.addToDoJob(newJob);
-
-            Job newJob2 = new Job();
-            newJob2.setDestination(new Position(14506, 12904));
-            JobStorage.addToDoJob(newJob2);
-
-            Job newJob3 = new Job();
-            newJob3.setDestination(new Position(15911, 14646));
-            JobStorage.addToDoJob(newJob3);
-
         }
     }
 }

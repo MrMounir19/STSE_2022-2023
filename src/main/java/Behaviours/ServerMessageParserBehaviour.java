@@ -58,7 +58,6 @@ public class ServerMessageParserBehaviour extends CyclicBehaviour {
     }
 
     private void handleLocationRequestMessage(ACLMessage message){
-        System.out.println("Request location");
         myAgent.addBehaviour( new LocationRequestReplyBehaviour(message));
     }
 

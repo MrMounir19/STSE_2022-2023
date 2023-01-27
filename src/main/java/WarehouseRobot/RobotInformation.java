@@ -53,9 +53,10 @@ public class RobotInformation {
 
     public static void addJob(Job job) {
         jobs.add(job);
-//        if (currentJob == null) {
-//            takeJobFromQueue();
-//        }
+        //TODO: If it causes problems: comment if-statement
+        if (currentJob == null) {
+            takeJobFromQueue();
+        }
     }
 
     public static void takeJobFromQueue() {

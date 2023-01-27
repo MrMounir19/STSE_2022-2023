@@ -25,11 +25,9 @@ public class RobComponents {
     static public EV3UltrasonicSensor ussL = null;
 
     public static void init() {
-        System.out.println("init");
         motorL = new EV3LargeRegulatedMotor(MotorPort.B);
         motorR = new EV3LargeRegulatedMotor(MotorPort.C);
         ussF = new EV3UltrasonicSensor(SensorPort.S3);
         ussL = new EV3UltrasonicSensor(SensorPort.S4);
-        System.out.println("Good init");
     }
 }

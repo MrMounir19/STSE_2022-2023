@@ -45,7 +45,6 @@ public class RobotMessageParserBehaviour extends CyclicBehaviour {
         JsonObject payload;
 
         try {
-            System.out.println(content);
             payload = Messages.toJson(content);
         } catch (Exception e) {
             e.printStackTrace();
