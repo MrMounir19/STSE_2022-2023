@@ -87,13 +87,10 @@ public class CollisionAvoidanceCheckBehaviour extends CyclicBehaviour {
     public boolean collisionCheck(RobotObject robot1, RobotObject robot2) {
         Position robot1Position = robot1.position;
         Position robot2Position = robot2.position;
-        System.out.println("r1 pos "+ robot1Position);
-        System.out.println("r2 pos "+ robot2Position);
         float collisionAvoidanceDistance = Config.getConfig().get("collision_avoidance_distance").getAsFloat();
         if ( robot1Position == null || robot2Position == null) {
             return false;
         }
-        System.out.println("Distance between " + robot1Position.distanceTo(robot2Position));
         return robot1Position.distanceTo(robot2Position) < 600;
     }
 

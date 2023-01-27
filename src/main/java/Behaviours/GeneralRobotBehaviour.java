@@ -188,7 +188,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
      */
     private Position getAccuratePosition() {
         RobotInformation.clearHistory();    // TODO: Don't wipe, but just fetch last 5 positions?
-        while (RobotInformation.positionHistory.size() < 5) {
+        while (RobotInformation.positionHistory.size() < 10) {
             Delay.msDelay(100);
         }
         Position p = new Position(0, 0);
@@ -298,7 +298,7 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 // break
                 System.out.println("Start corner avoidance");
                 MotorControl.moveForward();
-                Delay.msDelay(4000);
+                Delay.msDelay(4500);
                 double start_yaw = Math.toDegrees(RobotInformation.getYaw());
                 double goal_yaw = (start_yaw - 90) % 360;
                 double current_yaw = Math.toDegrees(RobotInformation.getYaw());
@@ -306,12 +306,12 @@ public class GeneralRobotBehaviour extends CyclicBehaviour {
                 System.out.println("goal: " + goal_yaw);
                 System.out.println(Math.abs(current_yaw - goal_yaw));
                 MotorControl.turnLeftInPlace();
-                while (Math.abs(current_yaw - goal_yaw) >= 3) {
+                while (Math.abs(current_yaw - goal_yaw) >= 4) {
                     current_yaw = Math.toDegrees(RobotInformation.getYaw());
                     Delay.msDelay(100);
                 }
                 MotorControl.moveForward();
-                Delay.msDelay(4000);
+                Delay.msDelay(4500);
                 attempts_count += 1;
                 System.out.println("AttemptCounts add");
 

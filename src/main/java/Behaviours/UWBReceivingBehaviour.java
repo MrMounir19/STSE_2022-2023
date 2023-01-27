@@ -56,7 +56,6 @@ public class UWBReceivingBehaviour extends CyclicBehaviour {
                             } else {
                                 if (robot.get("tagId").getAsString().equals(RobotInformation.getUwbID())) {
                                         RobotInformation.setRobotPosition( coordinates.get("x").getAsFloat(), coordinates.get("y").getAsFloat(), orientation.get("yaw").getAsFloat());
-                                        System.out.println(RobotInformation.position.toString());
                                 }
                             }
                         }

@@ -73,9 +73,7 @@ public class LocationManager {
             }
 
             Position nearestLocation = null;
-            System.out.println("1");
             float nearestDistance = Float.MAX_VALUE;
-            System.out.println("2");
             System.out.println(nearestDistance);
             System.out.println(locationArray);
             System.out.println(location);
@@ -83,13 +81,13 @@ public class LocationManager {
                 System.out.println(pos);
                 System.out.println(loc);
                 float distance = (float) Math.sqrt(Math.pow(pos.x - loc.x, 2) + Math.pow(pos.y - loc.y, 2));
-                System.out.println("Distance");
+                System.out.println(distance);
                 if (distance < nearestDistance) {
+                    nearestDistance = distance;
                     nearestLocation = loc;
                 }
             }
             System.out.println(nearestLocation);
-            System.out.println("3");
             if (nearestLocation == null) {
                 if (chargingStations.size() > 0) {
                     nearestLocation = chargingStations.get(0);
